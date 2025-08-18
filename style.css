@@ -91,3 +91,21 @@ button {
         .start-btn:hover {
             background: #ffd700;
         }
+
+        .doc-btn {
+            background-color: #0078d4;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .doc-btn:hover {
+            background-color: #005fa3;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+        }
