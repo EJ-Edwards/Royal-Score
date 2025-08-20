@@ -19,8 +19,7 @@ async function drawCards() {
 
   if (remainingCards === 0) {
     gameOver = true;
-    alert("Game over! No more cards.");
-
+    showGameSummary();
     checkAndUpdateHighScore();
     return;
   }
@@ -37,6 +36,25 @@ async function drawCards() {
 
   if (typeof renderCards === "function") renderCards(cards);
 }
+
+function showGameSummary() {
+  const summary = document.getElementById("game-summary");
+  const finalScore = document.getElementById("final-score");
+  const finalHighscore = document.getElementById("final-highscore");
+  finalScore.textContent = "Final Score: " + score;
+  const highscore = JSON.parse(localStorage.getItem("highestScore"));
+  finalHighscore.textContent = "High Score: " + (highscore && highscore.highscore ? highscore.highscore : 0);
+  summary.style.display = "flex";
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  const playAgainBtn = document.getElementById("play-again-btn");
+  if (playAgainBtn) {
+    playAgainBtn.onclick = function() {
+      location.reload();
+    };
+  }
+});
 
 async function createDeck(callback) {
   const url = "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=2";

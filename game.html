@@ -18,7 +18,17 @@
   <a href="documentation.html" class="doc-btn">Rules</a>
   </div>
 
+
   <div id="canvas-container"></div>
+
+  <div id="game-summary" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:999; align-items:center; justify-content:center;">
+    <div style="background:#222; color:gold; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.37); padding:40px 32px; text-align:center; max-width:350px; margin:auto;">
+      <h2>Game Over!</h2>
+      <p id="final-score">Final Score: </p>
+      <p id="final-highscore">High Score: </p>
+      <button id="play-again-btn" style="background:gold; color:#222; border:none; border-radius:8px; padding:14px 28px; font-size:1.1em; font-weight:600; margin:8px; cursor:pointer;">Play Again</button>
+    </div>
+  </div>
 
   <h2 id="remainingCards">Cards remaining: ?</h2>
   <h2 id="score">Score: 0</h2>
