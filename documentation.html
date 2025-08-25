@@ -9,6 +9,25 @@
 		h2 { color: #ffd700; }
 		ul { margin-left: 1.5em; }
 		.rule { margin-bottom: 1em; }
+		.doc-btn {
+			background-color: #0078d4;
+			color: #fff;
+			border: none;
+			border-radius: 6px;
+			padding: 12px 24px;
+			font-size: 1em;
+			font-weight: 500;
+			cursor: pointer;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+			transition: background 0.2s, box-shadow 0.2s;
+			text-decoration: none;
+			margin: 16px 0;
+			display: inline-block;
+		}
+		.doc-btn:hover {
+			background-color: #005fa3;
+			box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+		}
 	</style>
 	<script defer src="hamburger.js"></script>
 </head>
@@ -18,11 +37,7 @@
 		<span></span>
 		<span></span>
 	</div>
-	<nav class="mobile-menu" id="mobile-menu">
-		<a href="index.html">Home</a>
-		<a href="game.html">Play Game</a>
-		<a href="documentation.html">Rules</a>
-	</nav>
+
 	<h1>Royal Score - Rules & How to Play</h1>
 	<h2>Game Objective</h2>
 	<p>
@@ -50,7 +65,7 @@
 	</p>
 
 	<p>
-		<a href="game.html">Click here to return</a>
+		<a href="game.html" class="doc-btn">Back to Game</a>
 	</p>
 </body>
 </html>
