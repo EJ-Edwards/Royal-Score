@@ -1,34 +1,89 @@
-@media (max-width: 900px) {
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    z-index: 1001;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+.hamburger span {
+    display: block;
+    width: 36px;
+    height: 5px;
+    margin: 6px 0;
+    background: gold;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80vw;
+    max-width: 340px;
+    height: 100vh;
+    background: #222;
+    color: gold;
+    box-shadow: -2px 0 16px rgba(0,0,0,0.18);
+    z-index: 1000;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px 28px;
+    font-size: 1.3em;
+    touch-action: manipulation;
+}
+.mobile-menu.open {
+    display: flex;
+}
+.mobile-menu a, .mobile-menu button {
+    color: gold;
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    margin: 16px 0;
+    text-decoration: none;
+    cursor: pointer;
+}
+@media (max-width: 700px) {
+    .hamburger {
+        display: flex;
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+    }
     #controls {
-        width: 98%;
-        flex-direction: column;
-        align-items: stretch;
-    }
-    button, .doc-btn {
-        width: 100%;
-        margin: 8px 0;
-        font-size: 1em;
-        padding: 12px 0;
-    }
-    #canvas-container {
-        min-width: 0;
-        width: 100vw;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        gap: 2vw;
-        justify-content: flex-start;
-        padding-bottom: 8px;
-    }
-    .card {
-        width: 16vw;
-        max-width: 70px;
-        min-width: 40px;
-        height: 22vw;
-        max-height: 98px;
-        min-height: 56px;
-        flex: 0 0 auto;
+        display: none;
     }
 }
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
+        padding: 3px;
+    }
+    #canvas-container {
+        padding: 0 2vw;
+    }
+    .card {
+        width: 18vw;
+        max-width: 56px;
+        min-width: 32px;
+        height: 28vw;
+        max-height: 80px;
+        min-height: 40px;
+    }
+    button, .doc-btn {
+        font-size: 1.1em;
+        padding: 16px 0;
+    }
+}
+
 body {
     display: flex;
     flex-direction: column;

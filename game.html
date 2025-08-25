@@ -6,16 +6,26 @@
   <script defer src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js"></script>
   <script src="sketch.js"></script>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
+  <script defer src="hamburger.js"></script>
   
 </head>
 <body>
+  <div class="hamburger" id="hamburger-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="index.html">Home</a>
+    <a href="game.html">Play Game</a>
+    <a href="documentation.html">Rules</a>
+  </nav>
   <h1>Royal Score</h1>
   <div id="controls">
     <button id="draw-button">Draw</button>
     <button id="score-button">Score</button>
     <button id="reset-highscore">Reset High Score</button>
-  <a href="documentation.html" class="doc-btn">Rules</a>
   </div>
 
 
