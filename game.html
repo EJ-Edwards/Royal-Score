@@ -24,16 +24,18 @@
     <span></span>
   </div>
   <nav class="mobile-menu" id="mobile-menu">
-    <a href="index.html">Home</a>
-    <a href="game.html">Play Game</a>
-    <a href="documentation.html">Rules</a>
+    <a href="index.html">🏠 Home</a>
+    <a href="game.html">🃏 Play Game</a>
+    <button id="mobile-stats-btn">📊 Stats</button>
+    <a href="documentation.html">📖 Rules</a>
   </nav>
   <h1>Royal Score</h1>
   <div id="controls">
-  <button id="draw-button">Draw</button>
-  <button id="score-button">Score</button>
-  <button id="reset-highscore">Reset High Score</button>
-  <button id="rules-button" class="doc-btn desktop-only" onclick="window.location.href='documentation.html'">Rules</button>
+  <button id="draw-button" class="game-btn primary">🃏 Draw Cards</button>
+  <button id="score-button" class="game-btn secondary">🎯 Score Hand</button>
+  <button id="stats-button" class="game-btn info">📊 Stats</button>
+  <button id="reset-highscore" class="game-btn danger">🔄 Reset</button>
+  <button id="rules-button" class="doc-btn desktop-only" onclick="window.location.href='documentation.html'">📖 Rules</button>
   </div>
 
 
@@ -48,10 +50,43 @@
     </div>
   </div>
 
-  <h2 id="remainingCards">Cards remaining: ?</h2>
-  <h2 id="score">Score: 0</h2>
-  <h2 id="high-score">High Score: 0</h2>
-  <h2 id="last-card"></h2>
+  <div class="game-info">
+    <div class="info-card">
+      <span class="info-label">Cards Remaining</span>
+      <span id="remainingCards" class="info-value">?</span>
+    </div>
+    <div class="info-card">
+      <span class="info-label">Current Score</span>
+      <span id="score" class="info-value">0</span>
+    </div>
+    <div class="info-card">
+      <span class="info-label">High Score</span>
+      <span id="high-score" class="info-value">0</span>
+    </div>
+    <div class="info-card">
+      <span class="info-label">Last Card</span>
+      <span id="last-card" class="info-value">-</span>
+    </div>
+  </div>
+
+  <!-- Statistics Modal -->
+  <div id="stats-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📊 Game Statistics</h2>
+        <span class="close-modal">&times;</span>
+      </div>
+      <div id="stats-content" class="stats-grid">
+        <!-- Stats will be populated by JavaScript -->
+      </div>
+      <div class="achievements-section">
+        <h3>🏆 Achievements</h3>
+        <div id="achievements-grid" class="achievements-grid">
+          <!-- Achievements will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
