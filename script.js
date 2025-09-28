@@ -485,4 +485,36 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById("mobile-menu").classList.remove("open");
     };
   }
+  
+  // Mobile control buttons
+  const mobileDrawBtn = document.getElementById("mobile-draw-button");
+  const mobileScoreBtn = document.getElementById("mobile-score-button");
+  const mobileResetBtn = document.getElementById("mobile-reset-button");
+  
+  if (mobileDrawBtn) {
+    mobileDrawBtn.onclick = async () => {
+      await drawCards();
+    };
+  }
+  
+  if (mobileScoreBtn) {
+    mobileScoreBtn.onclick = () => {
+      scoreCards();
+    };
+  }
+  
+  if (mobileResetBtn) {
+    mobileResetBtn.onclick = () => {
+      if (confirm("Are you sure you want to reset your high score and statistics?")) {
+        localStorage.removeItem("highestScore");
+        localStorage.removeItem("gameStats");
+        localStorage.removeItem("achievements");
+        
+        // Reinitialize with default values
+        initializeStats();
+        updateHighScoreDisplay();
+        showNotification("Statistics reset successfully!", "info");
+      }
+    };
+  }
 });

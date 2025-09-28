@@ -9,57 +9,154 @@
     z-index: 1001;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
+    background: rgba(0,0,0,0.7);
+    border-radius: 8px;
+    padding: 8px;
+    transition: all 0.3s ease;
 }
+
+.hamburger:hover {
+    background: rgba(0,0,0,0.9);
+    transform: scale(1.05);
+}
+
 .hamburger span {
     display: block;
-    width: 36px;
-    height: 5px;
-    margin: 6px 0;
+    width: 28px;
+    height: 3px;
+    margin: 3px 0;
     background: gold;
     border-radius: 3px;
-    transition: 0.3s;
+    transition: all 0.3s ease;
+    transform-origin: center;
+}
+
+/* Hamburger animation when active */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(-20px);
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
 }
 .mobile-menu {
-    display: none;
     position: fixed;
     top: 0;
-    right: 0;
-    width: 80vw;
-    max-width: 340px;
+    right: -100%;
+    width: 85vw;
+    max-width: 320px;
     height: 100vh;
-    background: #222;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
     color: gold;
-    box-shadow: -2px 0 16px rgba(0,0,0,0.18);
+    box-shadow: -4px 0 20px rgba(0,0,0,0.3);
     z-index: 1000;
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 40px 28px;
-    font-size: 1.3em;
+    padding: 80px 24px 40px 24px;
+    font-size: 1.2em;
     touch-action: manipulation;
+    transition: right 0.3s ease-in-out;
+    border-left: 2px solid rgba(255,215,0,0.3);
+    backdrop-filter: blur(10px);
+    overflow-y: auto;
 }
+
 .mobile-menu.open {
-    display: flex;
+    right: 0;
 }
+
 .mobile-menu a, .mobile-menu button {
     color: gold;
     background: none;
     border: none;
-    font-size: 1.2em;
-    margin: 16px 0;
+    font-size: 1.1em;
+    margin: 12px 0;
+    padding: 16px 20px;
     text-decoration: none;
     cursor: pointer;
+    width: 100%;
+    text-align: left;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mobile-menu a:hover, .mobile-menu button:hover {
+    background: rgba(255,215,0,0.1);
+    transform: translateX(8px);
+    color: #fff;
+}
+
+.mobile-menu a:active, .mobile-menu button:active {
+    background: rgba(255,215,0,0.2);
+    transform: translateX(4px);
 }
 @media (max-width: 700px) {
     .hamburger {
         display: flex;
         position: fixed;
-        top: 16px;
-        right: 16px;
+        top: 20px;
+        right: 20px;
         width: 48px;
         height: 48px;
     }
+    
+    /* Hide desktop controls and show mobile-friendly layout */
     #controls {
-        display: none;
+        display: none !important;
+        visibility: hidden !important;
+    }
+    
+    /* Ensure mobile controls show */
+    .mobile-controls {
+        display: flex !important;
+    }
+    
+
+    
+    /* Make game info more compact on mobile */
+    .game-info {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin: 10px 16px 20px 16px;
+        max-width: none;
+    }
+    
+    .info-card {
+        padding: 10px;
+        font-size: 0.85em;
+        border: 1px solid rgba(255,215,0,0.2);
+    }
+    
+    .info-value {
+        font-size: 1.1em;
+    }
+    
+    .info-label {
+        font-size: 0.8em;
+    }
+    
+    /* Adjust canvas for mobile */
+    #canvas-container {
+        margin: 15px 0 20px 0;
+        padding: 0 8px;
+    }
+    
+    /* Mobile title */
+    h1 {
+        font-size: 1.6em;
+        margin: 70px 0 15px 0;
+        padding: 6px 12px;
+        background: rgba(0,0,0,0.8);
+        border: 1px solid rgba(255,215,0,0.3);
     }
 }
 @media (max-width: 480px) {
@@ -401,8 +498,74 @@ button {
     to { transform: translateY(0); opacity: 1; }
 }
 
+/* Mobile Controls Overlay */
+.mobile-controls {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.95);
+    border-radius: 20px;
+    padding: 8px 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255,215,0,0.4);
+    z-index: 1000;
+    gap: 8px;
+}
+
+.mobile-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    min-width: 55px;
+    touch-action: manipulation;
+    position: relative;
+}
+
+.mobile-btn.primary {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(69, 160, 73, 0.8));
+}
+
+.mobile-btn.secondary {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.8), rgba(25, 118, 210, 0.8));
+}
+
+.mobile-btn.danger {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.8), rgba(211, 47, 47, 0.8));
+}
+
+.mobile-btn:active {
+    transform: scale(0.95);
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.btn-icon {
+    font-size: 1.1em;
+    line-height: 1;
+}
+
+.btn-text {
+    font-size: 0.75em;
+    font-weight: 600;
+    line-height: 1;
+}
+
 /* Responsive adjustments */
 @media (max-width: 700px) {
+    .mobile-controls {
+        display: flex;
+    }
+    
     .game-info {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
@@ -416,5 +579,48 @@ button {
     
     .achievements-grid {
         grid-template-columns: 1fr;
+    }
+    
+    /* Add bottom padding to body to accommodate mobile controls */
+    body {
+        padding-bottom: 90px;
+        min-height: 100vh;
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .mobile-controls {
+        bottom: 15px;
+        padding: 6px 12px;
+        gap: 6px;
+        border-radius: 16px;
+    }
+    
+    .mobile-btn {
+        min-width: 48px;
+        padding: 8px 10px;
+    }
+    
+    .btn-icon {
+        font-size: 1em;
+    }
+    
+    .btn-text {
+        font-size: 0.7em;
+    }
+    
+    h1 {
+        font-size: 1.4em;
+        margin: 60px 0 10px 0;
+    }
+    
+    .game-info {
+        margin: 8px 12px 15px 12px;
+        gap: 6px;
+    }
+    
+    .info-card {
+        padding: 8px;
     }
 }

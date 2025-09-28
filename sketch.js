@@ -108,8 +108,18 @@ function preload() {
 }
 
 function setup() {
-  let w = window.innerWidth < 700 ? window.innerWidth * 0.95 : 1000;
-  let h = window.innerHeight < 500 ? window.innerHeight * 0.32 : 400;
+  let w, h;
+  
+  if (window.innerWidth <= 700) {
+    // Mobile: use more of the screen width and adjust height
+    w = window.innerWidth * 0.95;
+    h = window.innerHeight < 600 ? window.innerHeight * 0.25 : 300;
+  } else {
+    // Desktop
+    w = 1000;
+    h = 400;
+  }
+  
   canvas = createCanvas(w, h);
   canvas.parent('canvas-container');
   
@@ -130,8 +140,18 @@ function draw() {
 }
 
 function windowResized() {
-  let w = window.innerWidth < 700 ? window.innerWidth * 0.95 : 1000;
-  let h = window.innerHeight < 500 ? window.innerHeight * 0.32 : 400;
+  let w, h;
+  
+  if (window.innerWidth <= 700) {
+    // Mobile: use more of the screen width and adjust height
+    w = window.innerWidth * 0.95;
+    h = window.innerHeight < 600 ? window.innerHeight * 0.25 : 300;
+  } else {
+    // Desktop
+    w = 1000;
+    h = 400;
+  }
+  
   resizeCanvas(w, h);
   
   // Reset card positions to recalculate for new size
