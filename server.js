@@ -8,11 +8,11 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 // Serve static files from public directory
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/pages/index.html'));
+  res.sendFile(path.join(__dirname, 'public/pages/index.html'));
 });
 
 // Game rooms storage
