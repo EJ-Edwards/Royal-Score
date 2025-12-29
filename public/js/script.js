@@ -119,6 +119,8 @@ async function createDeck(callback) {
   const data = await response.json();
 
   deckID = data.deck_id;
+  remainingCards = data.remaining;
+  document.getElementById("remainingCards").textContent = remainingCards;
   callback(); 
 }
 
