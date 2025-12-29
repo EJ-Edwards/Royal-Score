@@ -2,13 +2,77 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Royal Score Documentation</title>
+	<link rel="stylesheet" href="../css/style.css"/>
 	<style>
-		body { background: #222; color: #fff8dc; font-family: Arial, sans-serif; padding: 2em; }
-		h1 { color: gold; }
-		h2 { color: #ffd700; }
-		ul { margin-left: 1.5em; }
-		.rule { margin-bottom: 1em; }
+		body { 
+			background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+			color: #fff8dc; 
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			padding: 2em; 
+			line-height: 1.6;
+			max-width: 1000px;
+			margin: 0 auto;
+		}
+		h1 { 
+			color: gold; 
+			text-align: center;
+			font-size: 2.5em;
+			margin-bottom: 0.5em;
+			text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+		}
+		h2 { 
+			color: #ffd700; 
+			margin-top: 2em;
+			border-bottom: 2px solid #ffd700;
+			padding-bottom: 0.5em;
+		}
+		h3 {
+			color: #ffed4e;
+			margin-top: 1.5em;
+		}
+		ul { 
+			margin-left: 1.5em;
+			margin-bottom: 1em;
+		}
+		li {
+			margin-bottom: 0.5em;
+		}
+		.rule { 
+			margin-bottom: 1em; 
+			padding: 0.5em;
+			background: rgba(255, 215, 0, 0.1);
+			border-left: 3px solid #ffd700;
+			padding-left: 1em;
+		}
+		.scoring-table {
+			width: 100%;
+			border-collapse: collapse;
+			margin: 1em 0;
+			background: rgba(255, 255, 255, 0.05);
+		}
+		.scoring-table th,
+		.scoring-table td {
+			padding: 12px;
+			text-align: left;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		}
+		.scoring-table th {
+			background: rgba(255, 215, 0, 0.2);
+			color: gold;
+			font-weight: bold;
+		}
+		.scoring-table tr:hover {
+			background: rgba(255, 215, 0, 0.1);
+		}
+		.tip-box {
+			background: rgba(0, 120, 212, 0.2);
+			border-left: 4px solid #0078d4;
+			padding: 1em;
+			margin: 1em 0;
+			border-radius: 4px;
+		}
 		.doc-btn {
 			background-color: #0078d4;
 			color: #fff;
@@ -19,14 +83,48 @@
 			font-weight: 500;
 			cursor: pointer;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-			transition: background 0.2s, box-shadow 0.2s;
+			transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
 			text-decoration: none;
-			margin: 16px 0;
+			margin: 8px 8px 8px 0;
 			display: inline-block;
 		}
 		.doc-btn:hover {
 			background-color: #005fa3;
 			box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+			transform: translateY(-2px);
+		}
+		.section {
+			background: rgba(255, 255, 255, 0.03);
+			padding: 1.5em;
+			border-radius: 8px;
+			margin: 1.5em 0;
+		}
+		.mode-section {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 1.5em;
+			margin: 1.5em 0;
+		}
+		.mode-card {
+			background: rgba(255, 255, 255, 0.05);
+			padding: 1.5em;
+			border-radius: 8px;
+			border: 2px solid rgba(255, 215, 0, 0.3);
+		}
+		.mode-card h3 {
+			margin-top: 0;
+			color: gold;
+		}
+		@media (max-width: 768px) {
+			body {
+				padding: 1em;
+			}
+			h1 {
+				font-size: 2em;
+			}
+			.mode-section {
+				grid-template-columns: 1fr;
+			}
 		}
 	</style>
 	<script defer src="../js/hamburger.js"></script>
@@ -44,35 +142,161 @@
 		<a href="documentation.html">📖 Rules</a>
 	</nav>
 
-	<h1>Royal Score - Rules & How to Play</h1>
-	<h2>Game Objective</h2>
-	<p>
-		Draw cards, score points based on your highest card, and try to beat the high score! The game ends when the deck runs out.
-	</p>
-	<h2>How to Play</h2>
-	<ul>
-		<li>Click <b>Draw</b> to draw 5 cards from the deck.</li>
-		<li>Review your cards displayed on the table.</li>
-		<li>Click <b>Score</b> to score your hand. Your score is determined by the highest card drawn.</li>
-		<li>Repeat: Draw, then Score, until the deck is empty.</li>
-		<li>Try to beat your previous high score!</li>
-	</ul>
-	<h2>Rules</h2>
-	<ul>
-		<li class="rule">You must score your hand before drawing again.</li>
-		<li class="rule">You can only score if cards are visible on the table.</li>
-		<li class="rule">The highest card in your hand determines your score for that round.</li>
-		<li class="rule">When the deck runs out, the game ends and your final score is compared to the high score.</li>
-	</ul>
-	<h2>Scoring</h2>
-	<p>
-		Each card rank has a point value. Higher cards score more points. For example:<br>
-		2 = 10 pts, 10 = 100 pts, Jack = 125 pts, Queen = 150 pts, King = 200 pts, Ace = 400 pts.
-	</p>
+	<h1>🎴 Royal Score - Rules & How to Play</h1>
+	
+	<div class="section">
+		<h2>🎯 Game Objective</h2>
+		<p>
+			Royal Score is a card game where you draw cards, score points based on your hand, and compete for the highest score! 
+			The game features both <strong>Solo</strong> and <strong>Multiplayer</strong> modes. Test your luck and strategy to achieve 
+			the best possible score.
+		</p>
+	</div>
 
-	<p>
-		<a href="game.html" class="doc-btn">Back to Game</a>
-	</p>
+	<div class="mode-section">
+		<div class="mode-card">
+			<h3>🎮 Solo Mode</h3>
+			<ul>
+				<li>Play against yourself</li>
+				<li>Beat your high score</li>
+				<li>Draw until deck is empty</li>
+				<li>Perfect for practice!</li>
+			</ul>
+		</div>
+		<div class="mode-card">
+			<h3>👥 Multiplayer Mode</h3>
+			<ul>
+				<li>Play with 2-6 friends</li>
+				<li>10 rounds per game</li>
+				<li>Take turns drawing</li>
+				<li>Highest score wins!</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="section">
+		<h2>📖 How to Play</h2>
+		<h3>Solo Mode</h3>
+		<ol>
+			<li>Click <strong>Draw</strong> to draw 5 cards from a standard 52-card deck.</li>
+			<li>Review your cards displayed on the table.</li>
+			<li>Click <strong>Score</strong> to score your hand. Your score is based on the <strong>highest card</strong> in your hand.</li>
+			<li>Repeat the Draw → Score cycle until the deck runs out.</li>
+			<li>Try to beat your previous high score!</li>
+		</ol>
+
+		<h3>Multiplayer Mode</h3>
+		<ol>
+			<li><strong>Create a Room:</strong> Enter your name, select max players, and create a room to get a 6-character code.</li>
+			<li><strong>Join a Room:</strong> Enter your name and the room code shared by your friend.</li>
+			<li><strong>Ready Up:</strong> All players must click "Ready Up" to start the game.</li>
+			<li><strong>Take Turns:</strong> Players take turns drawing 5 cards and scoring their hands.</li>
+			<li><strong>10 Rounds:</strong> The game lasts for 10 rounds. The player with the highest total score wins!</li>
+		</ol>
+	</div>
+
+	<div class="section">
+		<h2>📋 Game Rules</h2>
+		<div class="rule">
+			<strong>Rule 1:</strong> You must score your current hand before drawing new cards.
+		</div>
+		<div class="rule">
+			<strong>Rule 2:</strong> You can only score if cards are visible on the table.
+		</div>
+		<div class="rule">
+			<strong>Rule 3:</strong> The highest card in your hand determines your score for that round (suits don't matter).
+		</div>
+		<div class="rule">
+			<strong>Rule 4:</strong> In Solo mode, the game ends when the deck runs out. In Multiplayer, the game ends after 10 rounds.
+		</div>
+		<div class="rule">
+			<strong>Rule 5:</strong> In Multiplayer mode, you can only draw and score on your turn. Wait for others to complete their turns.
+		</div>
+	</div>
+
+	<div class="section">
+		<h2>💯 Scoring System</h2>
+		<p>
+			Each card rank has a specific point value. Your score for each round is determined by the <strong>highest ranked card</strong> 
+			in your 5-card hand. Here's the complete scoring breakdown:
+		</p>
+		
+		<table class="scoring-table">
+			<thead>
+				<tr>
+					<th>Card Rank</th>
+					<th>Points</th>
+					<th>Card Rank</th>
+					<th>Points</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>2 (Deuce)</td>
+					<td>10 pts</td>
+					<td>9</td>
+					<td>80 pts</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>20 pts</td>
+					<td>10</td>
+					<td>100 pts</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>30 pts</td>
+					<td>Jack (J)</td>
+					<td>125 pts</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>40 pts</td>
+					<td>Queen (Q)</td>
+					<td>150 pts</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>50 pts</td>
+					<td>King (K)</td>
+					<td>200 pts</td>
+				</tr>
+				<tr>
+					<td>7</td>
+					<td>60 pts</td>
+					<td><strong>Ace (A)</strong></td>
+					<td><strong>400 pts</strong></td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>70 pts</td>
+					<td colspan="2"></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="tip-box">
+			<strong>💡 Example:</strong> If you draw 3♠, 7♥, 9♦, K♣, 5♥, your score is <strong>200 points</strong> because the King 
+			is your highest card!
+		</div>
+	</div>
+
+	<div class="section">
+		<h2>💡 Tips & Strategy</h2>
+		<ul>
+			<li><strong>Play the Odds:</strong> With a 52-card deck, there are only 4 Aces. Drawing one is lucky!</li>
+			<li><strong>Consistency Wins:</strong> In Multiplayer, steady scoring can beat occasional high draws.</li>
+			<li><strong>Track the Deck:</strong> Pay attention to cards already played to estimate remaining high cards.</li>
+			<li><strong>Risk vs. Reward:</strong> Sometimes a King (200 pts) is better than hoping for an Ace (400 pts).</li>
+			<li><strong>Multiplayer Tactics:</strong> Watch your opponents' scores to know when you need to take risks.</li>
+		</ul>
+	</div>
+
+	<div style="text-align: center; margin: 2em 0;">
+		<a href="index.html" class="doc-btn">🏠 Home</a>
+		<a href="game.html" class="doc-btn">🎮 Solo Game</a>
+		<a href="multiplayer.html" class="doc-btn">👥 Multiplayer</a>
+	</div>
 
 	<div style="margin-top: 40px; padding: 20px; border-top: 1px solid #555; text-align: center;">
 		<h3 style="color: #ffd700; margin-bottom: 16px;">Credits</h3>
