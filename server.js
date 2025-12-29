@@ -5,14 +5,19 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: "*", // In production, you might want to restrict this to your domain
+    methods: ["GET", "POST"]
+  }
+});
 
-// Serve static files from public directory
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from root directory
+app.use(express.static(__dirname));
 
 // Serve root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/pages/index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Game rooms storage

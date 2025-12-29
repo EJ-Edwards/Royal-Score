@@ -353,31 +353,29 @@ function playSound(soundType) {
   console.log(`Playing sound: ${soundType}`);
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  // Set up event listeners
-  const createBtn = document.getElementById('create-room-btn');
-  if (createBtn) createBtn.addEventListener('click', createRoom);
-  
-  const joinBtn = document.getElementById('join-room-btn');
-  if (joinBtn) joinBtn.addEventListener('click', joinRoom);
-  
-  const readyBtn = document.getElementById('ready-btn');
-  if (readyBtn) readyBtn.addEventListener('click', setReady);
-  
-  const leaveBtn = document.getElementById('leave-room-btn');
-  if (leaveBtn) leaveBtn.addEventListener('click', leaveRoom);
-  
-  const drawBtn = document.getElementById('mp-draw-btn');
-  if (drawBtn) drawBtn.addEventListener('click', drawCards);
-  
-  const scoreBtn = document.getElementById('mp-score-btn');
-  if (scoreBtn) scoreBtn.addEventListener('click', scoreCards);
-  
-  // Mobile buttons
-  const mobileDrawBtn = document.getElementById('mp-mobile-draw');
-  if (mobileDrawBtn) mobileDrawBtn.addEventListener('click', drawCards);
-  
-  const mobileScoreBtn = document.getElementById('mp-mobile-score');
-  if (mobileScoreBtn) mobileScoreBtn.addEventListener('click', scoreCards);
-});
+// Initialize event listeners (script is deferred, so DOM is ready)
+// Set up event listeners
+const createBtn = document.getElementById('create-room-btn');
+if (createBtn) createBtn.addEventListener('click', createRoom);
+
+const joinBtn = document.getElementById('join-room-btn');
+if (joinBtn) joinBtn.addEventListener('click', joinRoom);
+
+const readyBtn = document.getElementById('ready-btn');
+if (readyBtn) readyBtn.addEventListener('click', setReady);
+
+const leaveBtn = document.getElementById('leave-room-btn');
+if (leaveBtn) leaveBtn.addEventListener('click', leaveRoom);
+
+const drawBtn = document.getElementById('mp-draw-btn');
+if (drawBtn) drawBtn.addEventListener('click', drawCards);
+
+const scoreBtn = document.getElementById('mp-score-btn');
+if (scoreBtn) scoreBtn.addEventListener('click', scoreCards);
+
+// Mobile buttons
+const mobileDrawBtn = document.getElementById('mp-mobile-draw');
+if (mobileDrawBtn) mobileDrawBtn.addEventListener('click', drawCards);
+
+const mobileScoreBtn = document.getElementById('mp-mobile-score');
+if (mobileScoreBtn) mobileScoreBtn.addEventListener('click', scoreCards);
