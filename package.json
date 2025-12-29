@@ -1,0 +1,30 @@
+{
+  "name": "royal-score",
+  "version": "2.0.0",
+  "description": "Full-stack multiplayer card game with Node.js and Socket.io",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
+    "install-all": "cd backend && npm install",
+    "backend": "cd backend && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EJ-Edwards/Royal-Score.git"
+  },
+  "keywords": [
+    "card-game",
+    "multiplayer",
+    "socket.io",
+    "real-time",
+    "nodejs",
+    "express",
+    "websocket"
+  ],
+  "author": "EJ Edwards",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,110 +1,111 @@
-# 🃏 Royal Score - Card Game
+# 🃏 Royal Score - Multiplayer Card Game
 
-A modern, responsive card game built with vanilla JavaScript and p5.js. Draw cards, score points based on your highest card, and compete for the high score!
+> A modern, real-time multiplayer card game with solo and competitive modes
 
-## 🎮 Live Demo
-[Play the Game](https://ej-edwards.github.io/Royal-Score/) _(Update with your GitHub Pages URL)_
+[![Made with Node.js](https://img.shields.io/badge/Made%20with-Node.js-green.svg)](https://nodejs.org/)
+[![Socket.io](https://img.shields.io/badge/Socket.io-4.6.1-blue.svg)](https://socket.io/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🎯 Features
+## 🎮 Quick Start
 
-- **Responsive Design**: Optimized for both desktop and mobile devices
-- **Interactive Gameplay**: Draw cards and score strategically 
-- **High Score System**: Local storage tracking with achievement notifications
-- **Modern UI/UX**: Clean design with smooth animations
-- **Statistics Tracking**: Game history and performance analytics
-- **Achievement System**: Unlock badges and track progress
-- **Accessibility**: Keyboard navigation and screen reader support
+```bash
+# Clone repository
+git clone https://github.com/EJ-Edwards/Royal-Score.git
+cd Royal-Score
 
-## 🚀 Technologies Used
+# Install and run
+cd backend
+npm install
+npm start
 
-- **Frontend**: HTML5, CSS3, JavaScript (ES6+)
-- **Graphics**: p5.js for canvas rendering
-- **API**: Deck of Cards API for card management
-- **Storage**: localStorage for data persistence
-- **Responsive Design**: CSS Grid & Flexbox
+# Open browser
+http://localhost:5500
+```
 
-## 🎲 How to Play
+## ✨ Features
 
-1. Click **Draw** to draw 5 cards from a shuffled double deck
-2. Review your hand displayed on the game table
-3. Click **Score** to score based on your highest card value
-4. Repeat until the deck is empty
-5. Try to beat your high score!
+- 🎯 **Solo Mode** - Classic single-player with high scores
+- 👥 **Multiplayer** - Real-time competitive gameplay (2-6 players)
+- 🏠 **Room System** - Private rooms with shareable codes
+- 📱 **Responsive** - Works on desktop, tablet, and mobile
+- 🎨 **Smooth Animations** - Canvas-based card rendering
+- 🏆 **Achievements** - Track stats and unlock badges
 
-### Scoring System
-- **2-9**: 10-80 points (10 × card value - 10)
-- **10**: 100 points
-- **Jack**: 125 points  
-- **Queen**: 150 points
-- **King**: 200 points
-- **Ace**: 400 points
+## 🛠️ Tech Stack
 
-## 🏗️ Project Structure
+**Frontend:** HTML5, CSS3, JavaScript (ES6+), p5.js, Socket.io Client  
+**Backend:** Node.js, Express.js, Socket.io  
+**APIs:** Deck of Cards API
+
+## 📁 Project Structure
 
 ```
 Royal-Score/
-├── index.html          # Landing page
-├── game.html           # Main game interface
-├── documentation.html  # Game rules and credits
-├── script.js          # Core game logic
-├── sketch.js          # p5.js canvas rendering
-├── style.css          # Responsive styling
-├── hamburger.js       # Mobile navigation
-└── README.md          # Project documentation
+├── backend/           # Server (Node.js + Express + Socket.io)
+├── public/            # Frontend files
+│   ├── css/          # Stylesheets
+│   ├── js/           # JavaScript
+│   └── pages/        # HTML pages
+└── docs/             # Documentation
 ```
 
-## 🛠️ Installation & Setup
+[See detailed structure →](docs/PROJECT_STRUCTURE.md)
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/EJ-Edwards/Royal-Score.git
-   cd Royal-Score
-   ```
+## 📚 Documentation
 
-2. **Open locally**
-   ```bash
-   # Using Python (if installed)
-   python -m http.server 8000
-   
-   # Using Node.js (if installed)
-   npx serve .
-   
-   # Or simply open index.html in your browser
-   ```
+- **[README](docs/README.md)** - Full project documentation
+- **[Quick Start](docs/QUICKSTART.md)** - Get running in 5 minutes
+- **[Deployment Guide](docs/DEPLOYMENT.md)** - Deploy to Heroku/Railway/Render
+- **[Portfolio Notes](docs/PORTFOLIO_NOTES.md)** - Interview prep & talking points
 
-3. **Access the game**
-   Navigate to `http://localhost:8000` or open `index.html` directly
+## 🎲 How to Play
 
-## 🎨 Key Features Showcase
+### Solo Mode
+1. Draw 5 cards
+2. Score based on your highest card
+3. Beat your high score!
 
-### Responsive Design
-- Mobile-first approach with hamburger navigation
-- Adaptive card sizing and layout
-- Touch-friendly interface
+### Multiplayer
+1. Create or join a room
+2. Wait for players to ready up
+3. Take turns drawing and scoring
+4. Highest score after 10 rounds wins!
 
-### Data Management
-- localStorage integration for persistent high scores
-- Game state management
-- Statistics tracking and display
+## 🚀 Deployment
 
-### API Integration
-- Real-time card fetching from external API
-- Asynchronous JavaScript operations
-- Error handling and fallbacks
+Deploy to any Node.js hosting platform:
 
-### Modern JavaScript
-- ES6+ features (async/await, arrow functions)
-- Modular code organization
-- Event-driven architecture
+```bash
+# Heroku
+heroku create royal-score
+git push heroku main
 
-## 🔮 Future Enhancements
+# Railway
+railway init
+railway up
+```
 
-- [ ] Multiplayer support
-- [ ] Different game modes (Time Attack, Challenge)
-- [ ] Card animation improvements
-- [ ] PWA capabilities
-- [ ] Backend integration for global leaderboards
-- [ ] Sound effects and music
+See [Deployment Guide](docs/DEPLOYMENT.md) for detailed instructions.
+
+## 💼 Portfolio Highlights
+
+This project demonstrates:
+- ✅ Full-stack development (Node.js + Frontend)
+- ✅ Real-time WebSocket communication
+- ✅ Responsive design & UX
+- ✅ RESTful API design
+- ✅ State management
+- ✅ Clean code architecture
+
+Perfect for showcasing in technical interviews!
+
+## 🤝 Contributing
+
+Contributions welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details
 
 ## 👨‍💻 Developer
 
@@ -112,10 +113,8 @@ Royal-Score/
 - Portfolio: [ej-edwards.github.io](https://ej-edwards.github.io/Portfolio-Website/)
 - GitHub: [@EJ-Edwards](https://github.com/EJ-Edwards)
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ---
 
-⭐ **Star this repo if you found it interesting!**
+⭐ **Star this repo if you found it useful!**
+
+Made with ❤️ and ☕ by EJ Edwards

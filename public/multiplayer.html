@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Royal Score - Multiplayer</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/multiplayer-style.css"/>
+  <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js"></script>
+  <script src="js/sketch.js"></script>
+  <script defer src="js/hamburger.js"></script>
+  <script defer src="js/multiplayer-client.js"></script>
+</head>
+<body class="multiplayer-body">
+  
+  <!-- Hamburger Menu -->
+  <div class="hamburger" id="hamburger-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="index.html">🏠 Home</a>
+    <a href="pages/game.html">🎮 Solo Game</a>
+    <a href="multiplayer.html">👥 Multiplayer</a>
+    <a href="pages/documentation.html">📖 Rules</a>
+  </nav>
+
+  <!-- Connection Status -->
+  <div id="connection-status" class="connection-status">🔴 Connecting...</div>
+
+  <h1 class="mp-title">👥 Royal Score Multiplayer</h1>
+
+  <!-- Room Setup Screen -->
+  <div id="room-setup" class="screen active">
+    <div class="setup-container">
+      
+      <!-- Create Room Section -->
+      <div class="setup-section">
+        <h2>🎮 Create a Room</h2>
+        <div class="form-group">
+          <label for="player-name">Your Name:</label>
+          <input type="text" id="player-name" placeholder="Enter your name" maxlength="20" />
+        </div>
+        <div class="form-group">
+          <label for="max-players">Max Players:</label>
+          <select id="max-players">
+            <option value="2">2 Players</option>
+            <option value="3">3 Players</option>
+            <option value="4" selected>4 Players</option>
+            <option value="6">6 Players</option>
+          </select>
+        </div>
+        <button id="create-room-btn" class="btn btn-primary">Create Room</button>
+      </div>
+
+      <div class="divider">
+        <span>OR</span>
+      </div>
+
+      <!-- Join Room Section -->
+      <div class="setup-section">
+        <h2>🚪 Join a Room</h2>
+        <div class="form-group">
+          <label for="join-player-name">Your Name:</label>
+          <input type="text" id="join-player-name" placeholder="Enter your name" maxlength="20" />
+        </div>
+        <div class="form-group">
+          <label for="room-code">Room Code:</label>
+          <input type="text" id="room-code" placeholder="Enter 6-character code" maxlength="6" style="text-transform: uppercase;" />
+        </div>
+        <button id="join-room-btn" class="btn btn-primary">Join Room</button>
+      </div>
+      
+    </div>
+    
+    <div class="info-box">
+      <h3>💡 How Multiplayer Works</h3>
+      <ul>
+        <li>Create or join a room with friends</li>
+        <li>Wait for all players to ready up</li>
+        <li>Take turns drawing and scoring cards</li>
+        <li>Highest score after 10 rounds wins!</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Game Lobby Screen -->
+  <div id="game-lobby" class="screen">
+    <div class="lobby-container">
+      <div class="lobby-header">
+        <h2>🎯 Game Lobby</h2>
+        <div class="room-code-display">
+          <span>Room Code:</span>
+          <strong id="display-room-code">------</strong>
+          <button onclick="copyRoomCode()" class="btn-icon" title="Copy code">📋</button>
+        </div>
+      </div>
+
+      <div class="lobby-content">
+        <div class="players-section">
+          <h3>👥 Players</h3>
+          <ul id="players-list" class="players-list">
+            <!-- Players will be dynamically added here -->
+          </ul>
+        </div>
+
+        <div class="lobby-actions">
+          <button id="ready-btn" class="btn btn-success">✓ Ready Up</button>
+          <button id="leave-room-btn" class="btn btn-danger">← Leave Room</button>
+        </div>
+
+        <div class="lobby-info">
+          <p>⏳ Waiting for all players to ready up...</p>
+          <p class="tip">Share the room code with your friends!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Area Screen -->
+  <div id="game-area" class="screen">
+    <div class="game-container">
+      
+      <!-- Game Info Bar -->
+      <div id="turn-info" class="game-info-bar">
+        <div class="info-item">
+          <span class="label">Round:</span>
+          <span class="value">1/10</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Current Turn:</span>
+          <span class="value">Waiting...</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Cards Left:</span>
+          <span class="value">104</span>
+        </div>
+      </div>
+
+      <!-- Canvas for Cards -->
+      <div id="canvas-container" class="mp-canvas-container"></div>
+
+      <!-- Desktop Controls -->
+      <div class="game-controls desktop-only">
+        <button id="mp-draw-btn" class="btn btn-primary">🃏 Draw Cards</button>
+        <button id="mp-score-btn" class="btn btn-success" disabled>🎯 Score Hand</button>
+        <button onclick="leaveRoom()" class="btn btn-secondary">← Leave Game</button>
+      </div>
+
+      <!-- Mobile Controls -->
+      <div class="mobile-controls mp-mobile-controls">
+        <button id="mp-mobile-draw" class="mobile-btn primary">
+          <span class="btn-icon">🃏</span>
+          <span class="btn-text">Draw</span>
+        </button>
+        <button id="mp-mobile-score" class="mobile-btn secondary" disabled>
+          <span class="btn-icon">🎯</span>
+          <span class="btn-text">Score</span>
+        </button>
+      </div>
+
+      <!-- Scoreboard -->
+      <div id="mp-scoreboard" class="scoreboard">
+        <h3>🏆 Scores</h3>
+        <!-- Scores will be dynamically updated -->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="game-over-screen" class="modal-overlay">
+    <div id="game-over-content" class="game-over-modal">
+      <!-- Content will be dynamically generated -->
+    </div>
+  </div>
+
+  <script>
+    function copyRoomCode() {
+      const roomCode = document.getElementById('display-room-code').textContent;
+      navigator.clipboard.writeText(roomCode).then(() => {
+        showNotification('Room code copied!', 'success');
+      });
+    }
+  </script>
+
+</body>
+</html>
