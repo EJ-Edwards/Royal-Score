@@ -1,5 +1,10 @@
 // Multiplayer client-side logic
-const socket = io();
+// Connect to the server - use environment-specific URL
+const SOCKET_URL = window.location.hostname === 'localhost' 
+   ? 'http://localhost:5500' 
+   : 'https://royal-score.onrender.com'; // Change this to your actual Render URL
+
+const socket = io(SOCKET_URL);
 
 let currentRoomId = null;
 let currentPlayerId = null;
