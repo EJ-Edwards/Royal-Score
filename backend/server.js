@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Serve root route
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../public/pages/index.html'));
 });
 
 // Game rooms storage
