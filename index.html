@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Score</title>
+    <meta name="description" content="Royal Score - A fun and strategic card game. Test your luck drawing cards and compete for high scores in solo or multiplayer mode!">
+    <meta name="author" content="EJ Edwards">
+    <meta name="theme-color" content="#0a4d0a">
+    <meta name="keywords" content="card game, online game, multiplayer game, web game, royal score, drawing cards">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Royal Score - Card Game">
+    <meta property="og:description" content="Test your luck and skill in this exciting card game! Play solo or with friends in multiplayer mode.">
+    <meta property="og:site_name" content="Royal Score">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Royal Score - Card Game">
+    <meta property="twitter:description" content="Test your luck and skill in this exciting card game! Play solo or with friends.">
+    
+    <title>Royal Score - Card Game</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script defer src="js/hamburger.js"></script>
+    <script defer src="js/ui-enhancements.js"></script>
 </head>
 <body>
     <div class="hamburger" id="hamburger-menu">
@@ -19,18 +40,31 @@
         <a href="multiplayer.html">👥 Multiplayer</a>
         <a href="documentation.html">📖 Rules</a>
     </nav>
-    <div class="welcome-container">
-        <h1>🎴 Welcome to Royal Score!</h1>
-        <p>
-            Test your luck and skill!<br>
+    <main class="welcome-container">
+        <h1 class="welcome-title">🎴 Welcome to Royal Score!</h1>
+        <p class="welcome-description">
+            Test your luck and skill in this exciting card game!<br>
             Draw cards, score points, and try to beat the high score.<br>
             Play solo or challenge your friends in multiplayer mode!<br>
-            Ready to play?
+            <strong>Ready to play?</strong>
         </p>
         <div class="game-mode-buttons">
-            <button class="start-btn solo" onclick="window.location.href='game.html'">🎮 Solo Game</button>
-            <button class="start-btn multiplayer" onclick="window.location.href='multiplayer.html'">👥 Multiplayer</button>
+            <button class="start-btn solo" onclick="window.location.href='game.html'" aria-label="Start Solo Game">
+                <span class="btn-icon">🎮</span>
+                <span class="btn-content">
+                    <span class="btn-title">Solo Game</span>
+                    <span class="btn-subtitle">Play against yourself</span>
+                </span>
+            </button>
+            <button class="start-btn multiplayer" onclick="window.location.href='multiplayer.html'" aria-label="Start Multiplayer Game">
+                <span class="btn-icon">👥</span>
+                <span class="btn-content">
+                    <span class="btn-title">Multiplayer</span>
+                    <span class="btn-subtitle">Play with friends</span>
+                </span>
+            </button>
         </div>
-    </div>
+        <a href="documentation.html" class="rules-link">📖 How to Play</a>
+    </main>
 </body>
 </html>

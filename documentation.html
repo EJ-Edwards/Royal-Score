@@ -3,131 +3,209 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Royal Score Documentation</title>
-	<link rel="stylesheet" href="css/style.css"/>
+	<meta name="description" content="Royal Score game rules, scoring system, and strategy guide. Learn how to play and master the game!">
+	<meta name="author" content="EJ Edwards">
+	<meta name="theme-color" content="#0a4d0a">
+	<title>Royal Score - Rules & Documentation</title>
+	<link rel="stylesheet" href="css/style.css"/>	<link rel="stylesheet" href="css/animations.css"/>	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
 		body { 
 			background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+			background-attachment: fixed;
 			color: #fff8dc; 
-			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 			padding: 2em; 
-			line-height: 1.6;
-			max-width: 1000px;
+			line-height: 1.7;
+			max-width: 1100px;
 			margin: 0 auto;
 		}
+
 		h1 { 
-			color: gold; 
+			color: #FFD700; 
 			text-align: center;
-			font-size: 2.5em;
-			margin-bottom: 0.5em;
-			text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+			font-size: 2.8em;
+			margin-bottom: 0.6em;
+			text-shadow: 3px 3px 8px rgba(0,0,0,0.6);
+			font-weight: 700;
+			letter-spacing: 1px;
 		}
+
 		h2 { 
-			color: #ffd700; 
-			margin-top: 2em;
-			border-bottom: 2px solid #ffd700;
-			padding-bottom: 0.5em;
+			color: #FFD700; 
+			margin-top: 2.5em;
+			border-bottom: 3px solid #FFD700;
+			padding-bottom: 0.6em;
+			font-size: 2em;
+			font-weight: 700;
 		}
+
 		h3 {
-			color: #ffed4e;
-			margin-top: 1.5em;
+			color: #FFED4E;
+			margin-top: 1.8em;
+			font-size: 1.5em;
+			font-weight: 600;
 		}
+
 		ul { 
-			margin-left: 1.5em;
-			margin-bottom: 1em;
+			margin-left: 1.8em;
+			margin-bottom: 1.2em;
 		}
+
 		li {
-			margin-bottom: 0.5em;
+			margin-bottom: 0.7em;
+			line-height: 1.6;
 		}
+
 		.rule { 
-			margin-bottom: 1em; 
-			padding: 0.5em;
-			background: rgba(255, 215, 0, 0.1);
-			border-left: 3px solid #ffd700;
-			padding-left: 1em;
+			margin-bottom: 1.2em; 
+			padding: 0.8em;
+			background: rgba(255, 215, 0, 0.12);
+			border-left: 4px solid #FFD700;
+			padding-left: 1.2em;
+			border-radius: 4px;
+			transition: all 0.3s ease;
 		}
+
+		.rule:hover {
+			background: rgba(255, 215, 0, 0.18);
+			transform: translateX(4px);
+		}
+
 		.scoring-table {
 			width: 100%;
 			border-collapse: collapse;
-			margin: 1em 0;
+			margin: 1.5em 0;
 			background: rgba(255, 255, 255, 0.05);
+			border-radius: 12px;
+			overflow: hidden;
+			box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 		}
+
 		.scoring-table th,
 		.scoring-table td {
-			padding: 12px;
+			padding: 16px;
 			text-align: left;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 		}
+
 		.scoring-table th {
-			background: rgba(255, 215, 0, 0.2);
-			color: gold;
-			font-weight: bold;
+			background: rgba(255, 215, 0, 0.25);
+			color: #FFD700;
+			font-weight: 700;
+			font-size: 1.1em;
 		}
+
 		.scoring-table tr:hover {
-			background: rgba(255, 215, 0, 0.1);
+			background: rgba(255, 215, 0, 0.15);
 		}
+
+		.scoring-table tbody tr:last-child td {
+			border-bottom: none;
+		}
+
 		.tip-box {
-			background: rgba(0, 120, 212, 0.2);
-			border-left: 4px solid #0078d4;
-			padding: 1em;
-			margin: 1em 0;
-			border-radius: 4px;
+			background: rgba(33, 150, 243, 0.15);
+			border-left: 5px solid #2196F3;
+			padding: 1.2em;
+			margin: 1.5em 0;
+			border-radius: 8px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 		}
+
 		.doc-btn {
-			background-color: #0078d4;
+			background: linear-gradient(135deg, #0078d4, #005fa3);
 			color: #fff;
 			border: none;
-			border-radius: 6px;
-			padding: 12px 24px;
-			font-size: 1em;
-			font-weight: 500;
+			border-radius: 10px;
+			padding: 14px 28px;
+			font-size: 1.05em;
+			font-weight: 600;
 			cursor: pointer;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-			transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+			box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+			transition: all 0.3s ease;
 			text-decoration: none;
-			margin: 8px 8px 8px 0;
+			margin: 10px 10px 10px 0;
 			display: inline-block;
+			font-family: 'Poppins', sans-serif;
 		}
+
 		.doc-btn:hover {
-			background-color: #005fa3;
-			box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-			transform: translateY(-2px);
+			background: linear-gradient(135deg, #005fa3, #004578);
+			box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+			transform: translateY(-3px);
 		}
+
 		.section {
-			background: rgba(255, 255, 255, 0.03);
-			padding: 1.5em;
-			border-radius: 8px;
-			margin: 1.5em 0;
+			background: rgba(255, 255, 255, 0.04);
+			padding: 2em;
+			border-radius: 12px;
+			margin: 2em 0;
+			border: 1px solid rgba(255, 215, 0, 0.2);
+			box-shadow: 0 2px 12px rgba(0,0,0,0.15);
 		}
+
 		.mode-section {
 			display: grid;
 			grid-template-columns: 1fr 1fr;
-			gap: 1.5em;
-			margin: 1.5em 0;
+			gap: 2em;
+			margin: 2em 0;
 		}
+
 		.mode-card {
-			background: rgba(255, 255, 255, 0.05);
-			padding: 1.5em;
-			border-radius: 8px;
-			border: 2px solid rgba(255, 215, 0, 0.3);
+			background: rgba(255, 255, 255, 0.06);
+			padding: 2em;
+			border-radius: 12px;
+			border: 2px solid rgba(255, 215, 0, 0.35);
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 12px rgba(0,0,0,0.15);
 		}
+
+		.mode-card:hover {
+			transform: translateY(-6px);
+			box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+			border-color: #FFD700;
+		}
+
 		.mode-card h3 {
 			margin-top: 0;
-			color: gold;
+			color: #FFD700;
+			font-size: 1.6em;
 		}
+
 		@media (max-width: 768px) {
 			body {
-				padding: 1em;
+				padding: 1.2em;
 			}
+
 			h1 {
-				font-size: 2em;
+				font-size: 2.2em;
 			}
+
+			h2 {
+				font-size: 1.7em;
+			}
+
 			.mode-section {
 				grid-template-columns: 1fr;
+			}
+
+			.scoring-table th,
+			.scoring-table td {
+				padding: 12px;
+				font-size: 0.95em;
 			}
 		}
 	</style>
 	<script defer src="js/hamburger.js"></script>
+	<script defer src="js/ui-enhancements.js"></script>
 </head>
 <body>
 	<div class="hamburger" id="hamburger-menu">

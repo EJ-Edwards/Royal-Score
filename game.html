@@ -3,10 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Royal Score Solo Game - Draw cards, score points, and beat your high score!">
+  <meta name="author" content="EJ Edwards">
+  <meta name="theme-color" content="#0a4d0a">
+  <meta name="keywords" content="solo card game, single player, high score, card drawing game">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Royal Score - Solo Mode">
+  <meta property="og:description" content="Draw cards, score points, and beat your high score in solo mode!">
+  
+  <title>Royal Score - Solo Game</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/animations.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <script defer src="js/script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js"></script>
   <script src="js/sketch.js"></script>
-  <link rel="stylesheet" href="css/style.css"/>
+  <script defer src="js/hamburger.js"></script>
+  <script defer src="js/ui-enhancements.js"></script>
   <style>
     @media (max-width: 700px) {
       .desktop-only {
@@ -14,8 +31,6 @@
       }
     }
   </style>
-  <script defer src="js/hamburger.js"></script>
-  
 </head>
 <body>
   <div class="hamburger" id="hamburger-menu">
@@ -30,45 +45,70 @@
     <button id="mobile-stats-btn">📊 Stats</button>
     <a href="documentation.html">📖 Rules</a>
   </nav>
-  <h1>Royal Score</h1>
-  <div id="controls">
-  <button id="draw-button" class="game-btn primary">🃏 Draw Cards</button>
-  <button id="score-button" class="game-btn secondary">🎯 Score Hand</button>
-  <button id="stats-button" class="game-btn info">📊 Stats</button>
-  <button id="reset-highscore" class="game-btn danger">🔄 Reset</button>
-  <button id="rules-button" class="doc-btn desktop-only" onclick="window.location.href='documentation.html'">📖 Rules</button>
-  </div>
+  <header>
+    <h1 class="game-title">🎴 Royal Score</h1>
+  </header>
+  <main>
+  <nav id="controls" class="game-controls" aria-label="Game controls">
+    <button id="draw-button" class="game-btn primary" aria-label="Draw 5 cards">
+      <span class="btn-icon">🃏</span>
+      <span class="btn-label">Draw Cards</span>
+    </button>
+    <button id="score-button" class="game-btn secondary" aria-label="Score your hand">
+      <span class="btn-icon">🎯</span>
+      <span class="btn-label">Score Hand</span>
+    </button>
+    <button id="stats-button" class="game-btn info" aria-label="View statistics">
+      <span class="btn-icon">📊</span>
+      <span class="btn-label">Stats</span>
+    </button>
+    <button id="reset-highscore" class="game-btn danger" aria-label="Reset high score">
+      <span class="btn-icon">🔄</span>
+      <span class="btn-label">Reset</span>
+    </button>
+    <button id="rules-button" class="doc-btn desktop-only" onclick="window.location.href='documentation.html'" aria-label="View game rules">
+      <span class="btn-icon">📖</span>
+      <span class="btn-label">Rules</span>
+    </button>
+  </nav>
 
 
-  <div id="canvas-container"></div>
+  <section id="canvas-container" class="canvas-section" aria-label="Game board"></section>
 
-  <div id="game-summary" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:999; align-items:center; justify-content:center;">
-    <div style="background:#222; color:gold; border-radius:16px; box-shadow:0 8px 32px rgba(0,0,0,0.37); padding:40px 32px; text-align:center; max-width:350px; margin:auto;">
-      <h2>Game Over!</h2>
-      <p id="final-score">Final Score: </p>
-      <p id="final-highscore">High Score: </p>
-      <button id="play-again-btn" style="background:gold; color:#222; border:none; border-radius:8px; padding:14px 28px; font-size:1.1em; font-weight:600; margin:8px; cursor:pointer;">Play Again</button>
+  <div id="game-summary" class="game-over-modal" style="display:none;" role="dialog" aria-labelledby="game-over-title" aria-modal="true">
+    <div class="game-summary-content">
+      <h2 id="game-over-title">🎊 Game Over!</h2>
+      <div class="final-stats">
+        <p id="final-score" class="stat-line"><strong>Final Score:</strong> <span class="stat-value">0</span></p>
+        <p id="final-highscore" class="stat-line"><strong>High Score:</strong> <span class="stat-value">0</span></p>
+      </div>
+      <button id="play-again-btn" class="play-again-button" aria-label="Play again">🎮 Play Again</button>
     </div>
   </div>
 
-  <div class="game-info">
-    <div class="info-card">
+  <section class="game-info" aria-label="Game statistics">
+    <div class="info-card" role="status">
+      <span class="info-icon">🃏</span>
       <span class="info-label">Cards Remaining</span>
-      <span id="remainingCards" class="info-value">?</span>
+      <span id="remainingCards" class="info-value" aria-live="polite">?</span>
     </div>
-    <div class="info-card">
+    <div class="info-card" role="status">
+      <span class="info-icon">🎯</span>
       <span class="info-label">Current Score</span>
-      <span id="score" class="info-value">0</span>
+      <span id="score" class="info-value" aria-live="polite">0</span>
     </div>
-    <div class="info-card">
+    <div class="info-card" role="status">
+      <span class="info-icon">🏆</span>
       <span class="info-label">High Score</span>
-      <span id="high-score" class="info-value">0</span>
+      <span id="high-score" class="info-value" aria-live="polite">0</span>
     </div>
-    <div class="info-card">
+    <div class="info-card" role="status">
+      <span class="info-icon">🎴</span>
       <span class="info-label">Last Card</span>
-      <span id="last-card" class="info-value">-</span>
+      <span id="last-card" class="info-value" aria-live="polite">-</span>
     </div>
-  </div>
+  </section>
+  </main>
 
   <!-- Mobile Controls Overlay -->
   <div class="mobile-controls">
