@@ -65,14 +65,31 @@ socket.on('gameStarted', (state) => {
 socket.on('cardsDrawn', ({ cards }) => {
   myCards = cards;
   renderMultiplayerCards(cards);
-  document.getElementById('mp-draw-btn').disabled = true;
-  document.getElementById('mp-score-btn').disabled = false;
+
+  const drawBtn = document.getElementById('mp-draw-btn');
+  const scoreBtn = document.getElementById('mp-score-btn');
+  const skipBtn = document.getElementById('mp-skip-btn');
+  const mobileDrawBtn = document.getElementById('mp-mobile-draw');
+  const mobileScoreBtn = document.getElementById('mp-mobile-score');
+  const mobileSkipBtn = document.getElementById('mp-mobile-skip');
+
+  if (drawBtn) drawBtn.disabled = true;
+  if (scoreBtn) scoreBtn.disabled = false;
+  if (skipBtn) skipBtn.disabled = false;
+  if (mobileDrawBtn) mobileDrawBtn.disabled = true;
+  if (mobileScoreBtn) mobileScoreBtn.disabled = false;
+  if (mobileSkipBtn) mobileSkipBtn.disabled = false;
 });
 
-socket.on('turnComplete', ({ playerId, points, card }) => {
+socket.on('turnComplete', ({ playerId, points, card, skipped }) => {
   const playerName = roomState.players.find(p => p.id === playerId)?.name || 'Player';
-  showNotification(`${playerName} scored ${points} points with ${card}!`, 'info');
-  playSound('score');
+  if (skipped) {
+    showNotification(`${playerName} skipped their hand`, 'warning');
+    playSound('skip');
+  } else {
+    showNotification(`${playerName} scored ${points} points with ${card}!`, 'info');
+    playSound('score');
+  }
 });
 
 socket.on('gameOver', ({ winner, finalScores }) => {
@@ -158,9 +175,51 @@ function scoreCards() {
   // Clear local cards
   myCards = [];
   clearCanvas();
-  
-  document.getElementById('mp-draw-btn').disabled = false;
-  document.getElementById('mp-score-btn').disabled = true;
+
+  const drawBtn = document.getElementById('mp-draw-btn');
+  const scoreBtn = document.getElementById('mp-score-btn');
+  const skipBtn = document.getElementById('mp-skip-btn');
+  const mobileDrawBtn = document.getElementById('mp-mobile-draw');
+  const mobileScoreBtn = document.getElementById('mp-mobile-score');
+  const mobileSkipBtn = document.getElementById('mp-mobile-skip');
+
+  if (drawBtn) drawBtn.disabled = false;
+  if (scoreBtn) scoreBtn.disabled = true;
+  if (skipBtn) skipBtn.disabled = true;
+  if (mobileDrawBtn) mobileDrawBtn.disabled = false;
+  if (mobileScoreBtn) mobileScoreBtn.disabled = true;
+  if (mobileSkipBtn) mobileSkipBtn.disabled = true;
+}
+
+function skipHand() {
+  if (!isMyTurn()) {
+    showNotification('Wait for your turn!', 'warning');
+    return;
+  }
+
+  if (myCards.length === 0) {
+    showNotification('Draw cards before skipping!', 'warning');
+    return;
+  }
+
+  socket.emit('skipHand');
+
+  myCards = [];
+  clearCanvas();
+
+  const drawBtn = document.getElementById('mp-draw-btn');
+  const scoreBtn = document.getElementById('mp-score-btn');
+  const skipBtn = document.getElementById('mp-skip-btn');
+  const mobileDrawBtn = document.getElementById('mp-mobile-draw');
+  const mobileScoreBtn = document.getElementById('mp-mobile-score');
+  const mobileSkipBtn = document.getElementById('mp-mobile-skip');
+
+  if (drawBtn) drawBtn.disabled = true;
+  if (scoreBtn) scoreBtn.disabled = true;
+  if (skipBtn) skipBtn.disabled = true;
+  if (mobileDrawBtn) mobileDrawBtn.disabled = true;
+  if (mobileScoreBtn) mobileScoreBtn.disabled = true;
+  if (mobileSkipBtn) mobileSkipBtn.disabled = true;
 }
 
 // UI update functions
@@ -264,12 +323,20 @@ function updateGameDisplay(state) {
   // Enable/disable buttons based on turn
   const drawBtn = document.getElementById('mp-draw-btn');
   const scoreBtn = document.getElementById('mp-score-btn');
-  
-  if (drawBtn && scoreBtn) {
-    const isMyTurn = state.currentPlayer === currentPlayerId;
-    drawBtn.disabled = !isMyTurn || myCards.length > 0;
-    scoreBtn.disabled = !isMyTurn || myCards.length === 0;
-  }
+  const skipBtn = document.getElementById('mp-skip-btn');
+  const mobileDrawBtn = document.getElementById('mp-mobile-draw');
+  const mobileScoreBtn = document.getElementById('mp-mobile-score');
+  const mobileSkipBtn = document.getElementById('mp-mobile-skip');
+
+  const isMyTurn = state.currentPlayer === currentPlayerId;
+  const hasCards = myCards.length > 0;
+
+  if (drawBtn) drawBtn.disabled = !isMyTurn || hasCards;
+  if (scoreBtn) scoreBtn.disabled = !isMyTurn || !hasCards;
+  if (skipBtn) skipBtn.disabled = !isMyTurn || !hasCards;
+  if (mobileDrawBtn) mobileDrawBtn.disabled = !isMyTurn || hasCards;
+  if (mobileScoreBtn) mobileScoreBtn.disabled = !isMyTurn || !hasCards;
+  if (mobileSkipBtn) mobileSkipBtn.disabled = !isMyTurn || !hasCards;
 }
 
 function showGameOverScreen(winner, finalScores) {
@@ -378,9 +445,15 @@ if (drawBtn) drawBtn.addEventListener('click', drawCards);
 const scoreBtn = document.getElementById('mp-score-btn');
 if (scoreBtn) scoreBtn.addEventListener('click', scoreCards);
 
+const skipBtn = document.getElementById('mp-skip-btn');
+if (skipBtn) skipBtn.addEventListener('click', skipHand);
+
 // Mobile buttons
 const mobileDrawBtn = document.getElementById('mp-mobile-draw');
 if (mobileDrawBtn) mobileDrawBtn.addEventListener('click', drawCards);
 
 const mobileScoreBtn = document.getElementById('mp-mobile-score');
 if (mobileScoreBtn) mobileScoreBtn.addEventListener('click', scoreCards);
+
+const mobileSkipBtn = document.getElementById('mp-mobile-skip');
+if (mobileSkipBtn) mobileSkipBtn.addEventListener('click', skipHand);

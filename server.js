@@ -287,7 +287,41 @@ io.on('connection', (socket) => {
       io.to(roomId).emit('turnComplete', { 
         playerId: socket.id, 
         points, 
-        card: highestCard 
+        card: highestCard,
+        skipped: false
+      });
+    }
+  });
+
+  socket.on('skipHand', () => {
+    const roomId = playerRooms.get(socket.id);
+    const room = rooms.get(roomId);
+    
+    if (!room || !room.gameStarted) return;
+    
+    const currentPlayer = room.getCurrentPlayer();
+    if (!currentPlayer || currentPlayer.id !== socket.id) {
+      socket.emit('error', { message: 'Not your turn!' });
+      return;
+    }
+
+    if (!currentPlayer.currentCards || currentPlayer.currentCards.length === 0) {
+      socket.emit('error', { message: 'Draw cards before skipping.' });
+      return;
+    }
+
+    room.updatePlayerCards(socket.id, []);
+    room.nextTurn();
+
+    if (room.gameOver || room.remainingCards < 5) {
+      endGame(roomId);
+    } else {
+      io.to(roomId).emit('roomUpdate', room.getRoomState());
+      io.to(roomId).emit('turnComplete', {
+        playerId: socket.id,
+        points: 0,
+        card: null,
+        skipped: true
       });
     }
   });
