@@ -9,25 +9,18 @@ function showNotification(message, type = 'info') {
         existing.remove();
     }
 
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification-toast ${type}`;
-    notification.textContent = message;
-
-    // Add styles
-    const style = document.createElement('style');
+    // Add styles if not already present
     if (!document.querySelector('#notification-styles')) {
+        const style = document.createElement('style');
         style.id = 'notification-styles';
         style.textContent = `
             .notification-toast {
                 position: fixed;
-                top: 90px;
-                right: 24px;
-                background: rgba(0, 0, 0, 0.95);
-                color: white;
+                top: 100px;
+                right: 20px;
                 padding: 16px 24px;
                 border-radius: 12px;
-                box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+                color: white;
                 z-index: 10000;
                 animation: slideInRight 0.4s ease, slideOutRight 0.4s ease 2.6s;
                 font-family: 'Poppins', sans-serif;
@@ -49,6 +42,11 @@ function showNotification(message, type = 'info') {
             .notification-toast.info {
                 border-color: #2196F3;
                 background: linear-gradient(135deg, rgba(33, 150, 243, 0.9), rgba(25, 118, 210, 0.9));
+            }
+
+            .notification-toast.warning {
+                border-color: #FF9800;
+                background: linear-gradient(135deg, rgba(255, 152, 0, 0.9), rgba(245, 124, 0, 0.9));
             }
 
             @keyframes slideInRight {
@@ -84,6 +82,11 @@ function showNotification(message, type = 'info') {
         document.head.appendChild(style);
     }
 
+    // Show notification to user
+    const notification = document.createElement('div');
+    notification.className = `notification-toast ${type}`;
+    notification.textContent = message;
+
     // Add to page
     document.body.appendChild(notification);
 
@@ -93,6 +96,46 @@ function showNotification(message, type = 'info') {
             notification.remove();
         }
     }, 3000);
+}
+
+// Play sound effect using audio manager
+function playSound(soundType) {
+    if (typeof audioManager !== 'undefined') {
+        switch(soundType) {
+            case 'cardDraw':
+                audioManager.playCardDraw();
+                break;
+            case 'score':
+                audioManager.playScore();
+                break;
+            case 'combo':
+                audioManager.playCombo();
+                break;
+            case 'skip':
+                audioManager.playSkip();
+                break;
+            case 'roundComplete':
+                audioManager.playRoundComplete();
+                break;
+            case 'gameOver':
+                audioManager.playGameOver();
+                break;
+            case 'win':
+                audioManager.playWin();
+                break;
+            case 'buttonClick':
+                audioManager.playButtonClick();
+                break;
+            case 'error':
+                audioManager.playError();
+                break;
+            case 'notification':
+                audioManager.playNotification();
+                break;
+            default:
+                console.log(`Unknown sound type: ${soundType}`);
+        }
+    }
 }
 
 // Enhanced button click feedback
@@ -188,4 +231,5 @@ document.addEventListener('DOMContentLoaded', () => {
 // Export for use in other scripts
 if (typeof window !== 'undefined') {
     window.showNotification = showNotification;
+    window.playSound = playSound;
 }

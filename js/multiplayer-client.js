@@ -19,11 +19,35 @@ const scoreRanks = [10, 20, 30, 40, 50, 60, 70, 80, 100, 125, 150, 200, 400];
 socket.on('connect', () => {
   console.log('Connected to server');
   updateConnectionStatus(true);
+  showNotification('Connected to server!', 'success');
+  playSound('notification');
+  
+  // Re-enable game controls if it's our turn
+  if (roomState && roomState.gameStarted && isMyTurn()) {
+    const drawBtn = document.getElementById('mp-draw-btn');
+    const scoreBtn = document.getElementById('mp-score-btn');
+    const skipBtn = document.getElementById('mp-skip-btn');
+    
+    if (drawBtn && myCards.length === 0) drawBtn.disabled = false;
+    if (scoreBtn && myCards.length > 0) scoreBtn.disabled = false;
+    if (skipBtn && myCards.length > 0) skipBtn.disabled = false;
+  }
 });
 
 socket.on('disconnect', () => {
   console.log('Disconnected from server');
   updateConnectionStatus(false);
+  showNotification('Disconnected from server. Attempting to reconnect...', 'warning');
+  playSound('error');
+  
+  // Disable game controls when disconnected
+  const drawBtn = document.getElementById('mp-draw-btn');
+  const scoreBtn = document.getElementById('mp-score-btn');
+  const skipBtn = document.getElementById('mp-skip-btn');
+  
+  if (drawBtn) drawBtn.disabled = true;
+  if (scoreBtn) scoreBtn.disabled = true;
+  if (skipBtn) skipBtn.disabled = true;
 });
 
 socket.on('roomCreated', ({ roomId, playerId }) => {
@@ -46,7 +70,14 @@ socket.on('playerJoined', ({ playerName }) => {
 });
 
 socket.on('playerLeft', ({ playerId }) => {
-  showNotification('A player left the room', 'warning');
+  const playerName = roomState.players.find(p => p.id === playerId)?.name || 'A player';
+  showNotification(`${playerName} left the room`, 'warning');
+  playSound('notification');
+  
+  // If game was in progress, show reconnect option
+  if (roomState && roomState.gameStarted) {
+    showNotification('Game paused due to player disconnect', 'info');
+  }
 });
 
 socket.on('roomUpdate', (state) => {
@@ -65,6 +96,14 @@ socket.on('gameStarted', (state) => {
 socket.on('cardsDrawn', ({ cards }) => {
   myCards = cards;
   renderMultiplayerCards(cards);
+  playSound('cardDraw');
+  
+  // Add card draw animation
+  const canvas = document.querySelector('#card-canvas');
+  if (canvas) {
+    canvas.classList.add('card-draw-animation');
+    setTimeout(() => canvas.classList.remove('card-draw-animation'), 500);
+  }
 
   const drawBtn = document.getElementById('mp-draw-btn');
   const scoreBtn = document.getElementById('mp-score-btn');
@@ -81,13 +120,17 @@ socket.on('cardsDrawn', ({ cards }) => {
   if (mobileSkipBtn) mobileSkipBtn.disabled = false;
 });
 
-socket.on('turnComplete', ({ playerId, points, card, skipped }) => {
+socket.on('turnComplete', ({ playerId, points, card, skipped, comboMultiplier }) => {
   const playerName = roomState.players.find(p => p.id === playerId)?.name || 'Player';
   if (skipped) {
     showNotification(`${playerName} skipped their hand`, 'warning');
     playSound('skip');
   } else {
-    showNotification(`${playerName} scored ${points} points with ${card}!`, 'info');
+    let message = `${playerName} scored ${points} points with ${card}!`;
+    if (comboMultiplier > 1) {
+      message += ` 🔥 ${comboMultiplier}x COMBO!`;
+    }
+    showNotification(message, 'info');
     playSound('score');
   }
 });
@@ -95,6 +138,15 @@ socket.on('turnComplete', ({ playerId, points, card, skipped }) => {
 socket.on('gameOver', ({ winner, finalScores }) => {
   showGameOverScreen(winner, finalScores);
   playSound('gameOver');
+});
+
+socket.on('roundComplete', ({ round, winner, scores }) => {
+  showRoundResultsScreen(round, winner, scores);
+  playSound('roundComplete');
+});
+
+socket.on('notification', ({ message, type }) => {
+  showNotification(message, type);
 });
 
 socket.on('error', ({ message }) => {
@@ -343,32 +395,111 @@ function showGameOverScreen(winner, finalScores) {
   const screen = document.getElementById('game-over-screen');
   const content = document.getElementById('game-over-content');
   
-  let html = '<h2>🎮 Game Over!</h2>';
+  let html = '<h2 class="champion-reveal">🎮 Game Over!</h2>';
   
   if (winner) {
     const isWinner = winner.id === currentPlayerId;
+    const title = getPlayerTitle(winner.score, finalScores.length);
     html += `
-      <div class="winner-announcement ${isWinner ? 'you-won' : ''}">
+      <div class="winner-announcement ${isWinner ? 'you-won' : ''} glow-pulse">
         ${isWinner ? '🎉 You Won!' : `👑 ${winner.name} Wins!`}
         <div class="winner-score">${winner.score} points</div>
+        <div class="winner-title">${title}</div>
       </div>
     `;
   }
   
   html += '<div class="final-scores"><h3>Final Scores</h3><ul>';
   finalScores.sort((a, b) => b.score - a.score).forEach((player, index) => {
-    html += `<li>#${index + 1} ${player.name}: ${player.score} points</li>`;
+    const title = getPlayerTitle(player.score, finalScores.length);
+    const isYou = player.id === currentPlayerId;
+    html += `
+      <li class="${index === 0 ? 'round-winner-item' : ''} pop-in" style="animation-delay: ${index * 0.1}s">
+        <span>#${index + 1} ${player.name}${isYou ? ' (You)' : ''}</span>
+        <span>${player.score} pts</span>
+        ${title ? `<span class="player-title-badge">${title}</span>` : ''}
+      </li>
+    `;
   });
   html += '</ul></div>';
   
   html += `
     <div class="game-over-actions">
-      <button onclick="leaveRoom()" class="btn btn-primary">Back to Lobby</button>
+      <button onclick="requestRematch()" class="btn btn-primary pop-in" style="animation-delay: 0.5s">🔄 Rematch</button>
+      <button onclick="leaveRoom()" class="btn btn-secondary pop-in" style="animation-delay: 0.6s">← Leave Room</button>
     </div>
   `;
   
   content.innerHTML = html;
   screen.style.display = 'flex';
+}
+
+function getPlayerTitle(score, playerCount) {
+  // Calculate titles based on score and player count
+  const avgScore = 1000; // Approximate average score per player
+  const scoreRatio = score / avgScore;
+  
+  if (scoreRatio >= 3) return '👑 Royal Champion';
+  if (scoreRatio >= 2.5) return '🏆 Grand Master';
+  if (scoreRatio >= 2) return '⭐ Elite Player';
+  if (scoreRatio >= 1.5) return '🎯 Sharp Shooter';
+  if (scoreRatio >= 1) return '🎴 Card Shark';
+  if (scoreRatio >= 0.75) return '🃏 Lucky Hand';
+  if (scoreRatio >= 0.5) return '🎲 Risk Taker';
+  return null;
+}
+
+function showRoundResultsScreen(round, winner, scores) {
+  const screen = document.getElementById('round-results-screen');
+  const content = document.getElementById('round-results-content');
+  
+  const isWinner = winner.id === currentPlayerId;
+  
+  let html = '<h2 class="round-winner-announcement">🎯 Round Complete!</h2>';
+  html += `<div class="round-number">Round ${round} of ${roomState.maxRounds}</div>`;
+  
+  html += `
+    <div class="round-winner ${isWinner ? 'y-won' : ''} glow-pulse">
+      <span class="crown-pop">👑</span>
+      ${isWinner ? '🎉 You Won This Round!' : `${winner.name} Wins This Round!`}
+      <div class="score-count-up" style="font-size: 1.2em; margin-top: 8px; color: #FFD700;">${winner.score} points</div>
+    </div>
+  `;
+  
+  html += '<div class="round-scores"><h3>Current Standings</h3><ul>';
+  scores.forEach((player, index) => {
+    const isRoundWinner = player.id === winner.id;
+    const isYou = player.id === currentPlayerId;
+    html += `
+      <li class="${isRoundWinner ? 'round-winner-item' : ''} pop-in" style="animation-delay: ${index * 0.1}s">
+        <span>#${index + 1} ${player.name}${isYou ? ' (You)' : ''}</span>
+        <span>${player.score} pts</span>
+      </li>
+    `;
+  });
+  html += '</ul></div>';
+  
+  html += `
+    <div class="round-results-actions">
+      <button onclick="continueToNextRound()" class="btn btn-primary pop-in" style="animation-delay: 0.5s">▶ Continue</button>
+    </div>
+  `;
+  
+  content.innerHTML = html;
+  screen.style.display = 'flex';
+}
+
+function continueToNextRound() {
+  const screen = document.getElementById('round-results-screen');
+  screen.style.display = 'none';
+  
+  // Request server to continue to next round
+  socket.emit('continueRound');
+}
+
+function requestRematch() {
+  socket.emit('requestRematch');
+  showNotification('Rematch requested!', 'info');
 }
 
 // Helper functions

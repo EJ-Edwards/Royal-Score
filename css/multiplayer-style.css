@@ -494,56 +494,69 @@
 
 .game-over-modal {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  color: #FFD700;
+  border: 3px solid var(--primary-gold);
   border-radius: 20px;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
-  padding: 48px 40px;
-  max-width: 550px;
+  padding: 40px;
+  max-width: 500px;
   width: 90%;
   text-align: center;
-  border: 3px solid #FFD700;
+  animation: popIn 0.5s ease;
+}
+
+.game-over-modal h2 {
+  color: var(--primary-gold);
+  font-size: 2.5em;
+  margin-bottom: 20px;
 }
 
 .winner-announcement {
-  font-size: 2.2em;
-  margin: 28px 0;
-  padding: 28px;
-  background: rgba(255, 215, 0, 0.12);
-  border-radius: 16px;
-  border: 2px solid rgba(255, 215, 0, 0.35);
-  font-weight: 700;
+  font-size: 1.8em;
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
 }
 
 .winner-announcement.you-won {
-  background: rgba(76, 175, 80, 0.25);
+  background: rgba(76, 175, 80, 0.2);
   border-color: #4CAF50;
-  color: #4CAF50;
-  animation: celebrate 0.6s ease;
-}
-
-@keyframes celebrate {
-  0%, 100% { transform: scale(1); }
-  25% { transform: scale(1.05) rotate(-2deg); }
-  75% { transform: scale(1.05) rotate(2deg); }
+  animation: pulse 1s ease-in-out infinite;
 }
 
 .winner-score {
-  font-size: 1.6em;
-  margin-top: 14px;
-  color: #FFD700;
+  font-size: 1.5em;
   font-weight: 700;
+  color: var(--primary-gold);
+  margin-top: 10px;
+}
+
+.winner-title {
+  font-size: 1.1em;
+  color: #FFA500;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.player-title-badge {
+  font-size: 0.8em;
+  padding: 4px 8px;
+  background: rgba(255, 215, 0, 0.2);
+  border-radius: 4px;
+  color: #FFD700;
+  margin-left: 10px;
+  font-weight: 600;
 }
 
 .final-scores {
-  margin: 28px 0;
+  margin: 30px 0;
   text-align: left;
 }
 
 .final-scores h3 {
+  color: var(--primary-gold);
+  margin-bottom: 15px;
   text-align: center;
-  margin-bottom: 20px;
-  color: #FFD700;
-  font-size: 1.5em;
 }
 
 .final-scores ul {
@@ -552,21 +565,147 @@
 }
 
 .final-scores li {
-  padding: 14px 18px;
-  margin-bottom: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 10px;
-  color: #fff8dc;
-  font-size: 1.15em;
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  padding: 12px;
+  margin: 8px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.final-scores li:first-child {
+  background: rgba(255, 215, 0, 0.15);
+  border: 2px solid var(--primary-gold);
 }
 
 .game-over-actions {
+  margin-top: 30px;
   display: flex;
-  gap: 14px;
+  gap: 15px;
   justify-content: center;
-  margin-top: 28px;
   flex-wrap: wrap;
+}
+
+/* Round Results Screen */
+.round-results-modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border: 3px solid var(--primary-gold);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  animation: popIn 0.5s ease;
+}
+
+.round-results-modal h2 {
+  color: var(--primary-gold);
+  font-size: 2.2em;
+  margin-bottom: 15px;
+}
+
+.round-number {
+  font-size: 1.2em;
+  color: var(--text-dim);
+  margin-bottom: 25px;
+}
+
+.round-winner {
+  font-size: 1.6em;
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(255, 215, 0, 0.1);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+.round-winner.y-won {
+  background: rgba(76, 175, 80, 0.2);
+  border-color: #4CAF50;
+}
+
+.round-scores {
+  margin: 25px 0;
+  text-align: left;
+}
+
+.round-scores h3 {
+  color: var(--primary-gold);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.round-scores ul {
+  list-style: none;
+  padding: 0;
+}
+
+.round-scores li {
+  padding: 10px;
+  margin: 6px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.round-scores li:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.round-scores li.round-winner-item {
+  background: rgba(255, 215, 0, 0.15);
+  border: 2px solid var(--primary-gold);
+  font-weight: 600;
+}
+
+.round-score-change {
+  font-size: 0.85em;
+  margin-left: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+.round-score-change.negative {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+}
+
+.round-results-actions {
+  margin-top: 25px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ===========================
+   Card Draw Animation
+   =========================== */
+.card-draw-animation {
+  animation: cardDrawPop 0.5s ease-out;
+}
+
+@keyframes cardDrawPop {
+  0% {
+    transform: scale(0.8) rotateY(90deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotateY(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotateY(0deg);
+    opacity: 1;
+  }
 }
 
 /* ===========================

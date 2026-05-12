@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Royal Score Settings - Customize your game experience">
+  <meta name="author" content="EJ Edwards">
+  <meta name="theme-color" content="#0a4d0a">
+  
+  <title>Royal Score - Settings</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script defer src="js/hamburger.js"></script>
+  <script defer src="js/ui-enhancements.js"></script>
+  <style>
+    .settings-container {
+      max-width: 800px;
+      margin: 100px auto 40px;
+      padding: 40px;
+      background: rgba(26, 26, 26, 0.95);
+      border-radius: 20px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    .settings-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .settings-header h1 {
+      color: #FFD700;
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .settings-section {
+      margin-bottom: 30px;
+      padding: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+
+    .settings-section h2 {
+      color: #FFD700;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-label {
+      color: #fff8dc;
+      font-size: 1.1em;
+    }
+
+    .setting-description {
+      color: #b8b8b8;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+    .setting-control {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 30px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #555;
+      transition: 0.4s;
+      border-radius: 30px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 24px;
+      width: 24px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .toggle-slider {
+      background-color: #4CAF50;
+    }
+
+    input:checked + .toggle-slider:before {
+      transform: translateX(30px);
+    }
+
+    /* Range Slider */
+    .range-slider {
+      width: 200px;
+      height: 8px;
+      border-radius: 5px;
+      background: #555;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #FFD700;
+      cursor: pointer;
+    }
+
+    .range-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #FFD700;
+      cursor: pointer;
+      appearance: none;
+    }
+
+    .range-value {
+      color: #FFD700;
+      font-weight: 600;
+      min-width: 50px;
+      text-align: right;
+    }
+
+    /* Select Dropdown */
+    .setting-select {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff8dc;
+      font-size: 1em;
+      cursor: pointer;
+      min-width: 150px;
+    }
+
+    .setting-select:focus {
+      outline: none;
+      border-color: #FFD700;
+    }
+
+    .settings-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .back-button {
+      background: linear-gradient(135deg, #757575, #616161);
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .back-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .save-button {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .save-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.35);
+    }
+  </style>
+</head>
+<body>
+  <div class="hamburger" id="hamburger-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="index.html">🏠 Home</a>
+    <a href="game.html">🎮 Solo Game</a>
+    <a href="multiplayer.html">👥 Multiplayer</a>
+    <a href="settings.html">⚙️ Settings</a>
+    <a href="documentation.html">📖 Rules</a>
+  </nav>
+
+  <div class="settings-container">
+    <div class="settings-header">
+      <h1>⚙️ Settings</h1>
+      <p style="color: #b8b8b8;">Customize your game experience</p>
+    </div>
+
+    <!-- Audio Settings -->
+    <div class="settings-section">
+      <h2>🔊 Audio</h2>
+      
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Master Volume</div>
+          <div class="setting-description">Control overall game volume</div>
+        </div>
+        <div class="setting-control">
+          <input type="range" class="range-slider" min="0" max="100" value="80" id="master-volume">
+          <span class="range-value">80%</span>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Music Volume</div>
+          <div class="setting-description">Background music volume</div>
+        </div>
+        <div class="setting-control">
+          <input type="range" class="range-slider" min="0" max="100" value="60" id="music-volume">
+          <span class="range-value">60%</span>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Sound Effects</div>
+          <div class="setting-description">Card draw, score, and UI sounds</div>
+        </div>
+        <div class="setting-control">
+          <input type="range" class="range-slider" min="0" max="100" value="80" id="sfx-volume">
+          <span class="range-value">80%</span>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Enable Sound</div>
+          <div class="setting-description">Turn all game sounds on or off</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="sound-enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video Settings -->
+    <div class="settings-section">
+      <h2>🎨 Display</h2>
+      
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Animations</div>
+          <div class="setting-description">Enable or disable UI animations</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="animations-enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Particle Effects</div>
+          <div class="setting-description">Show background particle animations</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="particles-enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Table Theme</div>
+          <div class="setting-description">Choose your preferred table background</div>
+        </div>
+        <div class="setting-control">
+          <select class="setting-select" id="table-theme">
+            <option value="classic">Classic Green</option>
+            <option value="royal">Royal Gold</option>
+            <option value="midnight">Midnight Blue</option>
+            <option value="crimson">Crimson Red</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gameplay Settings -->
+    <div class="settings-section">
+      <h2>🎮 Gameplay</h2>
+      
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Auto-Draw Cards</div>
+          <div class="setting-description">Automatically draw cards on your turn</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="auto-draw">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Show Round Results</div>
+          <div class="setting-description">Display round-by-round results</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="show-round-results">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Default Rounds</div>
+          <div class="setting-description">Number of rounds in multiplayer matches</div>
+        </div>
+        <div class="setting-control">
+          <select class="setting-select" id="default-rounds">
+            <option value="5">5 Rounds</option>
+            <option value="10" selected>10 Rounds</option>
+            <option value="15">15 Rounds</option>
+            <option value="20">20 Rounds</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-actions">
+      <button onclick="window.location.href='index.html'" class="back-button">← Back</button>
+      <button onclick="saveSettings()" class="save-button">💾 Save Settings</button>
+    </div>
+  </div>
+
+  <script>
+    // Load settings from localStorage
+    function loadSettings() {
+      const settings = JSON.parse(localStorage.getItem('royalScoreSettings') || '{}');
+      
+      // Audio settings
+      if (settings.masterVolume !== undefined) {
+        document.getElementById('master-volume').value = settings.masterVolume;
+        document.getElementById('master-volume').nextElementSibling.textContent = settings.masterVolume + '%';
+      }
+      if (settings.musicVolume !== undefined) {
+        document.getElementById('music-volume').value = settings.musicVolume;
+        document.getElementById('music-volume').nextElementSibling.textContent = settings.musicVolume + '%';
+      }
+      if (settings.sfxVolume !== undefined) {
+        document.getElementById('sfx-volume').value = settings.sfxVolume;
+        document.getElementById('sfx-volume').nextElementSibling.textContent = settings.sfxVolume + '%';
+      }
+      if (settings.soundEnabled !== undefined) {
+        document.getElementById('sound-enabled').checked = settings.soundEnabled;
+      }
+      
+      // Display settings
+      if (settings.animationsEnabled !== undefined) {
+        document.getElementById('animations-enabled').checked = settings.animationsEnabled;
+      }
+      if (settings.particlesEnabled !== undefined) {
+        document.getElementById('particles-enabled').checked = settings.particlesEnabled;
+      }
+      if (settings.tableTheme) {
+        document.getElementById('table-theme').value = settings.tableTheme;
+      }
+      
+      // Gameplay settings
+      if (settings.autoDraw !== undefined) {
+        document.getElementById('auto-draw').checked = settings.autoDraw;
+      }
+      if (settings.showRoundResults !== undefined) {
+        document.getElementById('show-round-results').checked = settings.showRoundResults;
+      }
+      if (settings.defaultRounds) {
+        document.getElementById('default-rounds').value = settings.defaultRounds;
+      }
+    }
+
+    // Save settings to localStorage
+    function saveSettings() {
+      const settings = {
+        // Audio settings
+        masterVolume: parseInt(document.getElementById('master-volume').value),
+        musicVolume: parseInt(document.getElementById('music-volume').value),
+        sfxVolume: parseInt(document.getElementById('sfx-volume').value),
+        soundEnabled: document.getElementById('sound-enabled').checked,
+        
+        // Display settings
+        animationsEnabled: document.getElementById('animations-enabled').checked,
+        particlesEnabled: document.getElementById('particles-enabled').checked,
+        tableTheme: document.getElementById('table-theme').value,
+        
+        // Gameplay settings
+        autoDraw: document.getElementById('auto-draw').checked,
+        showRoundResults: document.getElementById('show-round-results').checked,
+        defaultRounds: parseInt(document.getElementById('default-rounds').value)
+      };
+      
+      localStorage.setItem('royalScoreSettings', JSON.stringify(settings));
+      showNotification('Settings saved!', 'success');
+    }
+
+    // Update range slider values
+    document.querySelectorAll('.range-slider').forEach(slider => {
+      slider.addEventListener('input', function() {
+        this.nextElementSibling.textContent = this.value + '%';
+      });
+    });
+
+    // Load settings on page load
+    loadSettings();
+  </script>
+</body>
+</html>

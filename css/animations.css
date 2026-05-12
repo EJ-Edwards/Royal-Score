@@ -940,3 +940,121 @@
 .ease-elastic {
   animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
+/* ===========================
+   Round Winner Announcement Animation
+   =========================== */
+.round-winner-announcement {
+  animation: roundWinnerAnnounce 1.5s ease-out;
+}
+
+@keyframes roundWinnerAnnounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(-50px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(0);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ===========================
+   Crown Pop Animation
+   =========================== */
+.crown-pop {
+  animation: crownPop 0.8s ease-out;
+}
+
+@keyframes crownPop {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-180deg);
+  }
+  60% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ===========================
+   Score Count Up Animation
+   =========================== */
+.score-count-up {
+  animation: scoreCountUp 1s ease-out;
+}
+
+@keyframes scoreCountUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===========================
+   Champion Reveal Animation
+   =========================== */
+.champion-reveal {
+  animation: championReveal 2s ease-out;
+}
+
+@keyframes championReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotateY(180deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotateY(0deg);
+  }
+  100% {
+    transform: scale(1) rotateY(0deg);
+  }
+}
+
+/* ===========================
+   Pop In
+   =========================== */
+.pop-in {
+  animation: popIn 0.5s ease;
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===========================
+   Glow Pulse
+   =========================== */
+.glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.6);
+  }
+}

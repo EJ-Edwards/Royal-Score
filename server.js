@@ -37,6 +37,8 @@ class GameRoom {
     this.gameOver = false;
     this.currentRound = 1;
     this.maxRounds = 10;
+    this.comboMultiplier = 1;
+    this.lastScoringPlayer = null;
   }
 
   addPlayer(playerId, playerName) {
@@ -104,6 +106,14 @@ class GameRoom {
     }
   }
 
+  getRoundScores() {
+    return this.players.map(p => ({
+      id: p.id,
+      name: p.name,
+      score: p.score
+    })).sort((a, b) => b.score - a.score);
+  }
+
   updatePlayerCards(playerId, cards) {
     const player = this.players.find(p => p.id === playerId);
     if (player) {
@@ -162,6 +172,19 @@ class GameRoom {
     this.gameStarted = false;
     this.gameOver = false;
     this.currentRound = 1;
+    this.comboMultiplier = 1;
+    this.lastScoringPlayer = null;
+  }
+
+  calculateCombo(playerId) {
+    // If same player scores consecutively, increase combo
+    if (this.lastScoringPlayer === playerId) {
+      this.comboMultiplier = Math.min(this.comboMultiplier + 0.5, 3); // Max 3x multiplier
+    } else {
+      this.comboMultiplier = 1; // Reset combo
+    }
+    this.lastScoringPlayer = playerId;
+    return this.comboMultiplier;
   }
 }
 
@@ -270,26 +293,49 @@ io.on('connection', (socket) => {
     const cardRanks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "ACE"];
     const scoreRanks = [10, 20, 30, 40, 50, 60, 70, 80, 100, 125, 150, 200, 400];
     
-    const points = scoreRanks[cardRanks.indexOf(highestCard)];
+    const basePoints = scoreRanks[cardRanks.indexOf(highestCard)];
+    const comboMultiplier = room.calculateCombo(socket.id);
+    const points = Math.floor(basePoints * comboMultiplier);
+    
     room.updatePlayerScore(socket.id, points);
     
     // Clear player's cards
     room.updatePlayerCards(socket.id, []);
     
     // Move to next turn
+    const previousRound = room.currentRound;
     room.nextTurn();
     
-    // Check if game is over
-    if (room.gameOver || room.remainingCards < 5) {
-      endGame(roomId);
-    } else {
-      io.to(roomId).emit('roomUpdate', room.getRoomState());
-      io.to(roomId).emit('turnComplete', { 
-        playerId: socket.id, 
-        points, 
-        card: highestCard,
-        skipped: false
+    // Check if round completed (turn wrapped to 0)
+    if (room.currentTurn === 0 && room.currentRound !== previousRound) {
+      // Round completed - show round results
+      const roundScores = room.getRoundScores();
+      const roundWinner = roundScores[0];
+      
+      io.to(roomId).emit('roundComplete', {
+        round: previousRound,
+        winner: roundWinner,
+        scores: roundScores
       });
+      
+      // Check if game is over
+      if (room.gameOver || room.remainingCards < 5) {
+        endGame(roomId);
+      }
+    } else {
+      // Check if game is over
+      if (room.gameOver || room.remainingCards < 5) {
+        endGame(roomId);
+      } else {
+        io.to(roomId).emit('roomUpdate', room.getRoomState());
+        io.to(roomId).emit('turnComplete', { 
+          playerId: socket.id, 
+          points, 
+          card: highestCard,
+          skipped: false,
+          comboMultiplier: room.comboMultiplier
+        });
+      }
     }
   });
 
@@ -311,18 +357,40 @@ io.on('connection', (socket) => {
     }
 
     room.updatePlayerCards(socket.id, []);
+    
+    // Move to next turn
+    const previousRound = room.currentRound;
     room.nextTurn();
 
-    if (room.gameOver || room.remainingCards < 5) {
-      endGame(roomId);
-    } else {
-      io.to(roomId).emit('roomUpdate', room.getRoomState());
-      io.to(roomId).emit('turnComplete', {
-        playerId: socket.id,
-        points: 0,
-        card: null,
-        skipped: true
+    // Check if round completed (turn wrapped to 0)
+    if (room.currentTurn === 0 && room.currentRound !== previousRound) {
+      // Round completed - show round results
+      const roundScores = room.getRoundScores();
+      const roundWinner = roundScores[0];
+      
+      io.to(roomId).emit('roundComplete', {
+        round: previousRound,
+        winner: roundWinner,
+        scores: roundScores
       });
+      
+      // Check if game is over
+      if (room.gameOver || room.remainingCards < 5) {
+        endGame(roomId);
+      }
+    } else {
+      // Check if game is over
+      if (room.gameOver || room.remainingCards < 5) {
+        endGame(roomId);
+      } else {
+        io.to(roomId).emit('roomUpdate', room.getRoomState());
+        io.to(roomId).emit('turnComplete', {
+          playerId: socket.id,
+          points: 0,
+          card: null,
+          skipped: true
+        });
+      }
     }
   });
 
@@ -333,6 +401,33 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
     handlePlayerDisconnect(socket);
+  });
+
+  socket.on('continueRound', () => {
+    const roomId = playerRooms.get(socket.id);
+    const room = rooms.get(roomId);
+    
+    if (!room) return;
+    
+    // Check if all players have acknowledged the round results
+    // For now, just continue immediately
+    io.to(roomId).emit('roomUpdate', room.getRoomState());
+  });
+
+  socket.on('requestRematch', () => {
+    const roomId = playerRooms.get(socket.id);
+    const room = rooms.get(roomId);
+    
+    if (!room) return;
+    
+    // Reset the game for rematch
+    room.resetGame();
+    
+    // Start the game again
+    startGame(roomId);
+    
+    io.to(roomId).emit('roomUpdate', room.getRoomState());
+    io.to(roomId).emit('notification', { message: 'Rematch started!', type: 'success' });
   });
 });
 

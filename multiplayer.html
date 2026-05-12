@@ -24,7 +24,8 @@
   <script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.min.js"></script>
   <script src="js/sketch.js"></script>
   <script defer src="js/hamburger.js"></script>
-  <script defer src="js/multiplayer-client.js"></script>
+  <script defer src="js/audio-manager.js"></script>
+  <script src="js/multiplayer-client.js"></script>
   <script defer src="js/ui-enhancements.js"></script>
   <style>
     /* Animated background gradient */
@@ -267,6 +268,8 @@
     <a href="index.html">🏠 Home</a>
     <a href="game.html">🎮 Solo Game</a>
     <a href="multiplayer.html">👥 Multiplayer</a>
+    <a href="settings.html">⚙️ Settings</a>
+    <a href="credits.html">👥 Credits</a>
     <a href="documentation.html">📖 Rules</a>
   </nav>
 
@@ -421,6 +424,13 @@
   <!-- Game Over Screen -->
   <div id="game-over-screen" class="modal-overlay">
     <div id="game-over-content" class="game-over-modal">
+      <!-- Content will be dynamically generated -->
+    </div>
+  </div>
+
+  <!-- Round Results Screen -->
+  <div id="round-results-screen" class="modal-overlay">
+    <div id="round-results-content" class="round-results-modal">
       <!-- Content will be dynamically generated -->
     </div>
   </div>

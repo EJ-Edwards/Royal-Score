@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Royal Score Credits - Meet the team behind the game">
+  <meta name="author" content="EJ Edwards">
+  <meta name="theme-color" content="#0a4d0a">
+  
+  <title>Royal Score - Credits</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script defer src="js/hamburger.js"></script>
+  <script defer src="js/ui-enhancements.js"></script>
+  <style>
+    .credits-container {
+      max-width: 900px;
+      margin: 100px auto 40px;
+      padding: 40px;
+      background: rgba(26, 26, 26, 0.95);
+      border-radius: 20px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    .credits-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .credits-header h1 {
+      color: #FFD700;
+      font-size: 3em;
+      margin-bottom: 15px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .credits-header p {
+      color: #b8b8b8;
+      font-size: 1.2em;
+    }
+
+    .credits-section {
+      margin-bottom: 40px;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 215, 0, 0.15);
+    }
+
+    .credits-section h2 {
+      color: #FFD700;
+      font-size: 1.8em;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .credit-item {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .credit-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(10px);
+      border-left: 3px solid #FFD700;
+    }
+
+    .credit-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FFD700, #FFA500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8em;
+      margin-right: 20px;
+      flex-shrink: 0;
+    }
+
+    .credit-info {
+      flex: 1;
+    }
+
+    .credit-name {
+      color: #fff8dc;
+      font-size: 1.3em;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .credit-role {
+      color: #FFD700;
+      font-size: 1em;
+      font-weight: 500;
+    }
+
+    .credit-social {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .credit-social a {
+      color: #b8b8b8;
+      text-decoration: none;
+      font-size: 1.2em;
+      transition: color 0.3s ease;
+    }
+
+    .credit-social a:hover {
+      color: #FFD700;
+    }
+
+    .special-thanks {
+      text-align: center;
+      padding: 30px;
+      background: rgba(255, 215, 0, 0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+
+    .special-thanks h2 {
+      color: #FFD700;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+
+    .special-thanks ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .special-thanks li {
+      color: #fff8dc;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      font-size: 1em;
+    }
+
+    .version-info {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+    }
+
+    .version-info p {
+      color: #b8b8b8;
+      margin: 5px 0;
+    }
+
+    .version-info .version {
+      color: #FFD700;
+      font-weight: 600;
+      font-size: 1.2em;
+    }
+
+    .back-button {
+      background: linear-gradient(135deg, #757575, #616161);
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      display: block;
+      margin: 30px auto 0;
+    }
+
+    .back-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+      }
+      to {
+        text-shadow: 0 0 20px #FFD700, 0 0 30px #FFD700, 0 0 40px #FFD700;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hamburger" id="hamburger-menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  
+  <nav class="mobile-menu" id="mobile-menu">
+    <a href="index.html">🏠 Home</a>
+    <a href="game.html">🎮 Solo Game</a>
+    <a href="multiplayer.html">👥 Multiplayer</a>
+    <a href="settings.html">⚙️ Settings</a>
+    <a href="documentation.html">📖 Rules</a>
+  </nav>
+
+  <div class="credits-container">
+    <div class="credits-header">
+      <h1>👥 Credits</h1>
+      <p>The team behind Royal Score</p>
+    </div>
+
+    <!-- Development Team -->
+    <div class="credits-section">
+      <h2>🎮 Development Team</h2>
+      
+      <div class="credit-item">
+        <div class="credit-avatar">👨‍💻</div>
+        <div class="credit-info">
+          <div class="credit-name">EJ Edwards</div>
+          <div class="credit-role">Lead Developer & Designer</div>
+          <div class="credit-social">
+            <a href="https://github.com/EJ-Edwards" target="_blank" title="GitHub">🐙</a>
+            <a href="#" title="Twitter">🐦</a>
+            <a href="#" title="Website">🌐</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Special Thanks -->
+    <div class="credits-section">
+      <h2>🙏 Special Thanks</h2>
+      
+      <div class="special-thanks">
+        <h2>Libraries & Tools</h2>
+        <ul>
+          <li>Node.js</li>
+          <li>Express.js</li>
+          <li>Socket.io</li>
+          <li>P5.js</li>
+          <li>Electron</li>
+          <li>Deck of Cards API</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Version Info -->
+    <div class="version-info">
+      <p>Royal Score</p>
+      <p class="version">Version 2.0.0</p>
+      <p>© 2024 EJ Edwards. All rights reserved.</p>
+      <p style="margin-top: 15px; font-size: 0.9em;">
+        Made with ❤️ for card game enthusiasts everywhere
+      </p>
+    </div>
+
+    <button onclick="window.location.href='index.html'" class="back-button">← Back to Menu</button>
+  </div>
+</body>
+</html>
