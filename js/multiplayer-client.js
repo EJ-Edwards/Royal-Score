@@ -395,29 +395,27 @@ function showGameOverScreen(winner, finalScores) {
   const screen = document.getElementById('game-over-screen');
   const content = document.getElementById('game-over-content');
   
-  let html = '<h2 class="champion-reveal">🎮 Game Over!</h2>';
+  let html = '';
   
   if (winner) {
     const isWinner = winner.id === currentPlayerId;
     const title = getPlayerTitle(winner.score, finalScores.length);
     html += `
-      <div class="winner-announcement ${isWinner ? 'you-won' : ''} glow-pulse">
+      <div class="winner-announcement ${isWinner ? 'you-won' : ''}">
         ${isWinner ? '🎉 You Won!' : `👑 ${winner.name} Wins!`}
         <div class="winner-score">${winner.score} points</div>
-        <div class="winner-title">${title}</div>
+        ${title ? `<div class="winner-title">${title}</div>` : ''}
       </div>
     `;
   }
   
   html += '<div class="final-scores"><h3>Final Scores</h3><ul>';
   finalScores.sort((a, b) => b.score - a.score).forEach((player, index) => {
-    const title = getPlayerTitle(player.score, finalScores.length);
     const isYou = player.id === currentPlayerId;
     html += `
-      <li class="${index === 0 ? 'round-winner-item' : ''} pop-in" style="animation-delay: ${index * 0.1}s">
+      <li class="${index === 0 ? 'round-winner-item' : ''}">
         <span>#${index + 1} ${player.name}${isYou ? ' (You)' : ''}</span>
         <span>${player.score} pts</span>
-        ${title ? `<span class="player-title-badge">${title}</span>` : ''}
       </li>
     `;
   });
@@ -425,8 +423,8 @@ function showGameOverScreen(winner, finalScores) {
   
   html += `
     <div class="game-over-actions">
-      <button onclick="requestRematch()" class="btn btn-primary pop-in" style="animation-delay: 0.5s">🔄 Rematch</button>
-      <button onclick="leaveRoom()" class="btn btn-secondary pop-in" style="animation-delay: 0.6s">← Leave Room</button>
+      <button onclick="requestRematch()" class="btn btn-primary">🔄 Rematch</button>
+      <button onclick="leaveRoom()" class="btn btn-secondary">← Leave Room</button>
     </div>
   `;
   
@@ -455,14 +453,13 @@ function showRoundResultsScreen(round, winner, scores) {
   
   const isWinner = winner.id === currentPlayerId;
   
-  let html = '<h2 class="round-winner-announcement">🎯 Round Complete!</h2>';
+  let html = '<h2>🎯 Round Complete!</h2>';
   html += `<div class="round-number">Round ${round} of ${roomState.maxRounds}</div>`;
   
   html += `
-    <div class="round-winner ${isWinner ? 'y-won' : ''} glow-pulse">
-      <span class="crown-pop">👑</span>
+    <div class="round-winner ${isWinner ? 'you-won' : ''}">
       ${isWinner ? '🎉 You Won This Round!' : `${winner.name} Wins This Round!`}
-      <div class="score-count-up" style="font-size: 1.2em; margin-top: 8px; color: #FFD700;">${winner.score} points</div>
+      <div class="score-count-up">${winner.score} points</div>
     </div>
   `;
   
@@ -471,7 +468,7 @@ function showRoundResultsScreen(round, winner, scores) {
     const isRoundWinner = player.id === winner.id;
     const isYou = player.id === currentPlayerId;
     html += `
-      <li class="${isRoundWinner ? 'round-winner-item' : ''} pop-in" style="animation-delay: ${index * 0.1}s">
+      <li class="${isRoundWinner ? 'round-winner-item' : ''}">
         <span>#${index + 1} ${player.name}${isYou ? ' (You)' : ''}</span>
         <span>${player.score} pts</span>
       </li>
@@ -481,7 +478,7 @@ function showRoundResultsScreen(round, winner, scores) {
   
   html += `
     <div class="round-results-actions">
-      <button onclick="continueToNextRound()" class="btn btn-primary pop-in" style="animation-delay: 0.5s">▶ Continue</button>
+      <button onclick="continueToNextRound()" class="btn btn-primary">▶ Continue</button>
     </div>
   `;
   

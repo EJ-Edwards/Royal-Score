@@ -440,11 +440,20 @@ io.on('connection', (socket) => {
     const roomId = playerRooms.get(socket.id);
     const room = rooms.get(roomId);
     
-    if (!room) return;
+    if (!room) {
+      socket.emit('error', { message: 'Room not found' });
+      return;
+    }
     
     // Check if room has enough players for rematch
     if (room.players.length < 2) {
       socket.emit('error', { message: 'Need at least 2 players for rematch' });
+      return;
+    }
+    
+    // Check if game is actually over
+    if (!room.gameOver) {
+      socket.emit('error', { message: 'Game is not over yet' });
       return;
     }
     
