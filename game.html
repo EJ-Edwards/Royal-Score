@@ -30,6 +30,146 @@
         display: none !important;
       }
     }
+
+    /* Animated background gradient */
+    body {
+      background: linear-gradient(-45deg, #0a4d0a, #1a1a1a, #0a4d0a, #16213e);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Enhanced game title */
+    .game-title {
+      animation: titleGlow 3s ease-in-out infinite alternate;
+      position: relative;
+    }
+
+    @keyframes titleGlow {
+      from {
+        text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+      }
+      to {
+        text-shadow: 0 0 20px #FFD700, 0 0 30px #FFD700, 0 0 40px #FFD700;
+      }
+    }
+
+    /* Canvas container glow */
+    .canvas-section {
+      position: relative;
+    }
+
+    .canvas-section::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #FFD700, transparent, #FFD700);
+      border-radius: 16px;
+      z-index: -1;
+      animation: borderGlow 3s linear infinite;
+      background-size: 200% 200%;
+    }
+
+    @keyframes borderGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Info card enhancements */
+    .info-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .info-card:hover::before {
+      left: 100%;
+    }
+
+    /* Score pulse animation */
+    .info-value {
+      transition: transform 0.3s ease;
+    }
+
+    .info-value.scored {
+      animation: scorePulse 0.5s ease;
+    }
+
+    @keyframes scorePulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); color: #4CAF50; }
+      100% { transform: scale(1); }
+    }
+
+    /* Button enhancements */
+    .game-btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .game-btn:active::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    /* Game over modal enhancements */
+    .game-over-modal {
+      animation: modalPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    @keyframes modalPop {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Progress bar for cards remaining */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FFD700, #FFA500);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
   </style>
 </head>
 <body>
@@ -91,6 +231,9 @@
       <span class="info-icon">🃏</span>
       <span class="info-label">Cards Remaining</span>
       <span id="remainingCards" class="info-value" aria-live="polite">?</span>
+      <div class="progress-bar">
+        <div class="progress-fill" id="cards-progress" style="width: 100%"></div>
+      </div>
     </div>
     <div class="info-card" role="status">
       <span class="info-icon">🎯</span>
@@ -144,6 +287,30 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // Update progress bar when cards remaining changes
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.target.id === 'remainingCards') {
+          const remaining = parseInt(mutation.target.textContent);
+          const progress = document.getElementById('cards-progress');
+          if (progress && !isNaN(remaining)) {
+            const percentage = (remaining / 104) * 100;
+            progress.style.width = percentage + '%';
+          }
+        }
+      });
+    });
+
+    // Start observing when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      const remainingCards = document.getElementById('remainingCards');
+      if (remainingCards) {
+        observer.observe(remainingCards, { childList: true });
+      }
+    });
+  </script>
 </body>
 
 </html>

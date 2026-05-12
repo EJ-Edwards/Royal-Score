@@ -1,7 +1,7 @@
 // Multiplayer client-side logic
 // Connect to the server - use environment-specific URL
-const SOCKET_URL = window.location.hostname === 'localhost' 
-   ? 'http://localhost:5500' 
+const SOCKET_URL = window.location.protocol === 'file:' || window.location.hostname === 'localhost'
+   ? 'http://localhost:5500'
    : 'https://royal-score.onrender.com'; // Change this to your actual Render URL
 
 const socket = io(SOCKET_URL);
@@ -393,6 +393,13 @@ function clearCanvas() {
 }
 
 function showNotification(message, type = 'info') {
+  // Use the ui-enhancements notification if available
+  if (typeof window.showNotification === 'function') {
+    window.showNotification(message, type);
+    return;
+  }
+
+  // Fallback to inline notification
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
   notification.textContent = message;
@@ -410,6 +417,23 @@ function showNotification(message, type = 'info') {
     max-width: 300px;
     font-weight: 500;
   `;
+  
+  // Add animation keyframes if not already added
+  if (!document.querySelector('#notification-styles')) {
+    const style = document.createElement('style');
+    style.id = 'notification-styles';
+    style.textContent = `
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
   
   document.body.appendChild(notification);
   

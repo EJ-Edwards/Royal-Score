@@ -26,8 +26,235 @@
   <script defer src="js/hamburger.js"></script>
   <script defer src="js/multiplayer-client.js"></script>
   <script defer src="js/ui-enhancements.js"></script>
+  <style>
+    /* Animated background gradient */
+    .multiplayer-body {
+      background: linear-gradient(-45deg, #0a4d0a, #1a1a1a, #0a4d0a, #16213e);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Enhanced title glow */
+    .mp-title {
+      animation: titleGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes titleGlow {
+      from {
+        text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700;
+      }
+      to {
+        text-shadow: 0 0 20px #FFD700, 0 0 30px #FFD700, 0 0 40px #FFD700;
+      }
+    }
+
+    /* Floating decorations */
+    .floating-icon {
+      position: fixed;
+      font-size: 3em;
+      opacity: 0.1;
+      animation: floatIcon 20s infinite ease-in-out;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes floatIcon {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-30px) rotate(10deg);
+      }
+    }
+
+    /* Enhanced setup sections */
+    .setup-section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .setup-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 215, 0, 0.05),
+        transparent
+      );
+      transform: rotate(45deg);
+      transition: all 0.5s;
+      opacity: 0;
+    }
+
+    .setup-section:hover::before {
+      opacity: 1;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    /* Enhanced player list items */
+    .player-item {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .player-item::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .player-item:hover::after {
+      left: 100%;
+    }
+
+    /* Enhanced scoreboard items */
+    .score-item {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .score-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.15), transparent);
+      transition: left 0.5s;
+    }
+
+    .score-item:hover::before {
+      left: 100%;
+    }
+
+    /* Enhanced buttons */
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:active::after {
+      width: 300px;
+      height: 300px;
+    }
+
+    /* Canvas glow effect */
+    .mp-canvas-container {
+      position: relative;
+    }
+
+    .mp-canvas-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #FFD700, transparent, #FFD700);
+      border-radius: 16px;
+      z-index: -1;
+      animation: borderGlow 3s linear infinite;
+      background-size: 200% 200%;
+    }
+
+    @keyframes borderGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Game info bar enhancement */
+    .game-info-bar {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-info-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+      animation: infoBarShine 3s infinite;
+    }
+
+    @keyframes infoBarShine {
+      0% { left: -100%; }
+      50%, 100% { left: 100%; }
+    }
+
+    /* Connection status pulse */
+    .connection-status.connected {
+      animation: statusPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+      50% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.8); }
+    }
+
+    /* Screen transitions */
+    .screen {
+      animation: screenFadeIn 0.5s ease;
+    }
+
+    @keyframes screenFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </head>
 <body class="multiplayer-body">
+  
+  <!-- Floating decorations -->
+  <div class="floating-icon" style="top: 10%; left: 5%; animation-delay: 0s;">🃏</div>
+  <div class="floating-icon" style="top: 20%; right: 8%; animation-delay: 3s;">👑</div>
+  <div class="floating-icon" style="top: 60%; left: 10%; animation-delay: 6s;">🎴</div>
+  <div class="floating-icon" style="top: 70%; right: 5%; animation-delay: 9s;">🏆</div>
+  <div class="floating-icon" style="top: 40%; left: 3%; animation-delay: 12s;">⭐</div>
   
   <!-- Hamburger Menu -->
   <div class="hamburger" id="hamburger-menu">

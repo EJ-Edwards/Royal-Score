@@ -37,23 +37,59 @@ async function drawCards() {
     return;
   }
 
-  const url = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=5`;
-  const response = await fetch(url);
-  const data = await response.json();
-
-  cards = data.cards;
-  remainingCards = data.remaining;
-
-  document.getElementById("remainingCards").textContent = remainingCards;
-
-  // Clear previous card positions to trigger new animation
-  if (typeof window.cardPositions !== 'undefined') {
-    window.cardPositions = [];
-    window.animatingCards = false;
+  // Disable draw button and show loading state
+  const drawBtn = document.getElementById("draw-button");
+  const mobileDrawBtn = document.getElementById("mobile-draw-button");
+  if (drawBtn) {
+    drawBtn.disabled = true;
+    drawBtn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-label">Drawing...</span>';
   }
-  
-  if (typeof renderCards === "function") {
-    renderCards(cards);
+  if (mobileDrawBtn) {
+    mobileDrawBtn.disabled = true;
+    mobileDrawBtn.querySelector('.btn-text').textContent = 'Drawing...';
+  }
+
+  try {
+    const url = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=5`;
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error('Failed to draw cards from API');
+    }
+    
+    const data = await response.json();
+
+    if (data.success === false) {
+      throw new Error(data.error || 'Failed to draw cards');
+    }
+
+    cards = data.cards;
+    remainingCards = data.remaining;
+
+    document.getElementById("remainingCards").textContent = remainingCards;
+
+    // Clear previous card positions to trigger new animation
+    if (typeof window.cardPositions !== 'undefined') {
+      window.cardPositions = [];
+      window.animatingCards = false;
+    }
+    
+    if (typeof renderCards === "function") {
+      renderCards(cards);
+    }
+  } catch (error) {
+    console.error('Error drawing cards:', error);
+    showNotification('Failed to draw cards. Please try again.', 'error');
+  } finally {
+    // Re-enable draw button
+    if (drawBtn) {
+      drawBtn.disabled = false;
+      drawBtn.innerHTML = '<span class="btn-icon">🃏</span><span class="btn-label">Draw Cards</span>';
+    }
+    if (mobileDrawBtn) {
+      mobileDrawBtn.disabled = false;
+      mobileDrawBtn.querySelector('.btn-text').textContent = 'Draw';
+    }
   }
 }
 
@@ -114,14 +150,28 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 async function createDeck(callback) {
-  const url = "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=2";
-  const response = await fetch(url);
-  const data = await response.json();
+  try {
+    const url = "https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=2";
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error('Failed to create deck from API');
+    }
+    
+    const data = await response.json();
 
-  deckID = data.deck_id;
-  remainingCards = data.remaining;
-  document.getElementById("remainingCards").textContent = remainingCards;
-  callback(); 
+    if (data.success === false) {
+      throw new Error(data.error || 'Failed to create deck');
+    }
+
+    deckID = data.deck_id;
+    remainingCards = data.remaining;
+    document.getElementById("remainingCards").textContent = remainingCards;
+    callback();
+  } catch (error) {
+    console.error('Error creating deck:', error);
+    showNotification('Failed to initialize game. Please refresh the page.', 'error');
+  }
 }
 
 function initializeStats() {
@@ -159,14 +209,20 @@ createDeck(async () => {
 
 function scoreCards() {
   if (gameOver) {
-    alert("Game over. Refresh to start a new game.");
+    showNotification("Game over. Click Play Again to start a new game.", "warning");
     return;
   }
 
   if (cards.length === 0) {
-    alert("No cards to score.");
+    showNotification("Draw cards first!", "warning");
     return;
   }
+
+  // Disable score button
+  const scoreBtn = document.getElementById("score-button");
+  const mobileScoreBtn = document.getElementById("mobile-score-button");
+  if (scoreBtn) scoreBtn.disabled = true;
+  if (mobileScoreBtn) mobileScoreBtn.disabled = true;
 
   let highestValue = cards[0].value;
   for (let i = 1; i < cards.length; i++) {
@@ -181,6 +237,18 @@ function scoreCards() {
 
   // Update card-specific statistics
   updateCardStats(highestValue);
+
+  // Clear cards after scoring
+  cards = [];
+  if (typeof window.cardPositions !== 'undefined') {
+    window.cardPositions = [];
+  }
+
+  // Re-enable score button after a short delay
+  setTimeout(() => {
+    if (scoreBtn) scoreBtn.disabled = false;
+    if (mobileScoreBtn) mobileScoreBtn.disabled = false;
+  }, 500);
 
   drawCards();
 }
@@ -268,6 +336,13 @@ function checkAchievements() {
 }
 
 function showNotification(message, type = "info") {
+  // Use the ui-enhancements notification if available
+  if (typeof window.showNotification === 'function') {
+    window.showNotification(message, type);
+    return;
+  }
+
+  // Fallback to inline notification
   const notification = document.createElement('div');
   notification.className = `notification ${type}`;
   notification.textContent = message;
@@ -275,7 +350,7 @@ function showNotification(message, type = "info") {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: ${type === 'success' ? '#4CAF50' : type === 'achievement' ? '#FF9800' : '#2196F3'};
+    background: ${type === 'success' ? '#4CAF50' : type === 'achievement' ? '#FF9800' : type === 'warning' ? '#FF9800' : '#2196F3'};
     color: white;
     padding: 16px 24px;
     border-radius: 8px;

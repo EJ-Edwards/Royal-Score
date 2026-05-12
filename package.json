@@ -2,10 +2,12 @@
   "name": "royal-score",
   "version": "2.0.0",
   "description": "Full-stack multiplayer card game with Node.js and Socket.io",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "electron": "electron .",
+    "electron-dev": "electron ."
   },
   "repository": {
     "type": "git",
@@ -28,5 +30,8 @@
   },
   "engines": {
     "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "electron": "^42.0.1"
   }
 }
