@@ -72,6 +72,11 @@ class GameRoom {
         this.currentTurn = 0;
       }
       
+      // If no players left, reset turn
+      if (this.players.length === 0) {
+        this.currentTurn = 0;
+      }
+      
       return true;
     }
     return false;
@@ -91,10 +96,17 @@ class GameRoom {
   }
 
   getCurrentPlayer() {
+    if (this.players.length === 0 || this.currentTurn >= this.players.length) {
+      return null;
+    }
     return this.players[this.currentTurn];
   }
 
   nextTurn() {
+    if (this.players.length === 0) {
+      return;
+    }
+    
     this.currentTurn = (this.currentTurn + 1) % this.players.length;
     
     // Check if round is complete (all players have had a turn)
@@ -253,7 +265,7 @@ io.on('connection', (socket) => {
     if (!room || !room.gameStarted) return;
     
     const currentPlayer = room.getCurrentPlayer();
-    if (currentPlayer.id !== socket.id) {
+    if (!currentPlayer || currentPlayer.id !== socket.id) {
       socket.emit('error', { message: 'Not your turn!' });
       return;
     }
@@ -284,7 +296,7 @@ io.on('connection', (socket) => {
     if (!room || !room.gameStarted) return;
     
     const currentPlayer = room.getCurrentPlayer();
-    if (currentPlayer.id !== socket.id) {
+    if (!currentPlayer || currentPlayer.id !== socket.id) {
       socket.emit('error', { message: 'Not your turn!' });
       return;
     }
@@ -293,7 +305,13 @@ io.on('connection', (socket) => {
     const cardRanks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "JACK", "QUEEN", "KING", "ACE"];
     const scoreRanks = [10, 20, 30, 40, 50, 60, 70, 80, 100, 125, 150, 200, 400];
     
-    const basePoints = scoreRanks[cardRanks.indexOf(highestCard)];
+    const cardIndex = cardRanks.indexOf(highestCard);
+    if (cardIndex === -1) {
+      socket.emit('error', { message: 'Invalid card value' });
+      return;
+    }
+    
+    const basePoints = scoreRanks[cardIndex];
     const comboMultiplier = room.calculateCombo(socket.id);
     const points = Math.floor(basePoints * comboMultiplier);
     
@@ -358,6 +376,10 @@ io.on('connection', (socket) => {
 
     room.updatePlayerCards(socket.id, []);
     
+    // Reset combo on skip
+    room.comboMultiplier = 1;
+    room.lastScoringPlayer = null;
+    
     // Move to next turn
     const previousRound = room.currentRound;
     room.nextTurn();
@@ -420,6 +442,12 @@ io.on('connection', (socket) => {
     
     if (!room) return;
     
+    // Check if room has enough players for rematch
+    if (room.players.length < 2) {
+      socket.emit('error', { message: 'Need at least 2 players for rematch' });
+      return;
+    }
+    
     // Reset the game for rematch
     room.resetGame();
     
@@ -440,15 +468,35 @@ async function startGame(roomId) {
   const room = rooms.get(roomId);
   if (!room) return;
 
+  // Check if room has enough players
+  if (room.players.length < 2) {
+    io.to(roomId).emit('error', { message: 'Need at least 2 players to start' });
+    return;
+  }
+
   try {
     // Create new shuffled deck
     const response = await fetch('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=2');
     const data = await response.json();
     
+    if (!data.success) {
+      throw new Error('Failed to create deck');
+    }
+    
     room.deckId = data.deck_id;
     room.remainingCards = data.remaining;
     room.gameStarted = true;
     room.currentTurn = 0;
+    room.currentRound = 1;
+    room.gameOver = false;
+    room.comboMultiplier = 1;
+    room.lastScoringPlayer = null;
+    
+    // Reset player scores and cards
+    room.players.forEach(p => {
+      p.score = 0;
+      p.currentCards = [];
+    });
     
     io.to(roomId).emit('gameStarted', room.getRoomState());
     console.log(`Game started in room ${roomId}`);

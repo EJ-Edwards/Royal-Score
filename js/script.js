@@ -30,6 +30,11 @@ const scoreRanks = [
 async function drawCards() {
   if (gameOver) return;
 
+  if (remainingCards === undefined || remainingCards === null) {
+    console.error('remainingCards is undefined');
+    remainingCards = 0;
+  }
+
   if (remainingCards === 0) {
     gameOver = true;
     showGameSummary();
@@ -226,12 +231,20 @@ function scoreCards() {
 
   let highestValue = cards[0].value;
   for (let i = 1; i < cards.length; i++) {
-    if (cardRanks.indexOf(cards[i].value) > cardRanks.indexOf(highestValue)) {
+    const cardIndex = cardRanks.indexOf(cards[i].value);
+    const highestIndex = cardRanks.indexOf(highestValue);
+    if (cardIndex > highestIndex) {
       highestValue = cards[i].value;
     }
   }
 
-  score += scoreRanks[cardRanks.indexOf(highestValue)];
+  const highestIndex = cardRanks.indexOf(highestValue);
+  if (highestIndex === -1) {
+    showNotification("Invalid card value detected", "error");
+    return;
+  }
+
+  score += scoreRanks[highestIndex];
   document.getElementById("score").textContent = score;
   document.getElementById("last-card").textContent = highestValue;
 
@@ -250,7 +263,14 @@ function scoreCards() {
     if (mobileScoreBtn) mobileScoreBtn.disabled = false;
   }, 500);
 
-  drawCards();
+  // Only draw cards if game isn't over
+  if (!gameOver && remainingCards > 0) {
+    drawCards();
+  } else if (remainingCards === 0) {
+    gameOver = true;
+    showGameSummary();
+    checkAndUpdateHighScore();
+  }
 }
 
 function checkAndUpdateHighScore() {
@@ -400,17 +420,30 @@ function updateHighScoreDisplay() {
   }
 }
 
-document.getElementById("draw-button").onclick = async () => {
-  await drawCards();
-};
-
-document.getElementById("score-button").onclick = () => {
-  scoreCards();
-};
-
-document.getElementById("stats-button").onclick = () => {
-  showStatsModal();
-};
+// Move event listeners inside DOMContentLoaded to ensure elements exist
+document.addEventListener("DOMContentLoaded", function() {
+  const drawBtn = document.getElementById("draw-button");
+  const scoreBtn = document.getElementById("score-button");
+  const statsBtn = document.getElementById("stats-button");
+  
+  if (drawBtn) {
+    drawBtn.onclick = async () => {
+      await drawCards();
+    };
+  }
+  
+  if (scoreBtn) {
+    scoreBtn.onclick = () => {
+      scoreCards();
+    };
+  }
+  
+  if (statsBtn) {
+    statsBtn.onclick = () => {
+      showStatsModal();
+    };
+  }
+});
 
 function updateCardStats(cardValue) {
   let stats = JSON.parse(localStorage.getItem("gameStats")) || {};
